@@ -55,8 +55,8 @@ namespace WpfApp1
 
         public void Tick()
         {
-            colorchangetest();
-            //colorchange();
+            //colorchangetest();
+            colorchange();
 
         }
 

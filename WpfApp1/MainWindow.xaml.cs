@@ -56,7 +56,7 @@ namespace WpfApp1
         public void Engine(object sender, EventArgs e)
         {
             Carticker++;
-            if (Carticker == 200)
+            if (Carticker == 200 && CarsOnScreen.Count()<maxcar)
             {
                 CreateNewCar(210, 0, direction.East);
                 Carticker = 0;
