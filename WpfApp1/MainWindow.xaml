@@ -6,7 +6,19 @@
         xmlns:local="clr-namespace:WpfApp1"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        <TextBlock x:Name="text" Margin="348,196,372,198" RenderTransformOrigin="0.5,0.5">replace</TextBlock>
-    </Grid>
+    <Canvas x:Name="Canvas">
+        <TextBlock x:Name="test">test</TextBlock>
+        <Rectangle x:Name="Road" Height="888" Width="20" Fill="Orange" Canvas.Left="388" Canvas.Top="-220" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Left" VerticalAlignment="Top">
+            <Rectangle.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="90"/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Rectangle.RenderTransform>
+        </Rectangle>
+        
+    
+    </Canvas>
 </Window>
