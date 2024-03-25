@@ -25,47 +25,8 @@ namespace WpfApp1
         {
             return connected;
         }
-        public string connectTcpListener()
-        {
-            string ipAddress = "127.0.0.1";  // Alissa 80.61.129.65
-            int port = 12345;                 // De poort om naar te luisteren
 
-            TcpListener listener = new TcpListener(IPAddress.Parse(ipAddress), port);
-            listener.Start();
-            Console.WriteLine("Wacht op verbindingen...");
-
-            using (TcpClient client = listener.AcceptTcpClient())
-            {
-                Console.WriteLine("Verbinding geaccepteerd.");
-
-                using (NetworkStream stream = client.GetStream())
-                {
-                    byte[] buffer = new byte[1024];
-                    int bytesRead = stream.Read(buffer, 0, buffer.Length);
-                    string message = Encoding.Default.GetString(buffer, 0, bytesRead);
-                    Console.WriteLine("Ontvangen: " + message);
-                    return message;
-                }
-            }
-        }
-
-        public string connectSocket()
-        {
-            socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp); 
-            socket.Bind(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 12345)); 
-
-            socket.Listen(1); 
-            Socket accepteddata = socket.Accept(); 
-            data = new byte[accepteddata.SendBufferSize]; 
-            int j = accepteddata.Receive(data); 
-            byte[] adata = new byte[j];         
-            for (int i = 0; i < j; i++)         
-                adata[i] = data[i];             
-            return Encoding.Default.GetString(adata);
-                                   
-
-        }
-
+        
         public void Connect(string ipAddress, int port)
         {
             socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);

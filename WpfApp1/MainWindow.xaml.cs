@@ -32,6 +32,7 @@ namespace WpfApp1
         public int connectionticker;
         public int screenleft=800;
         public int screenbottom=450;
+        public string ipadress = "192.168.2.2";
 
         public MainWindow()
         {
@@ -49,7 +50,7 @@ namespace WpfApp1
             CreateNewCar(210, 0, direction.East);
             
             tcp = new Tcp();
-            tcp.Connect("127.0.0.1", 12345);
+            tcp.Connect(ipadress, 12345);
 
         }
 
@@ -202,10 +203,12 @@ namespace WpfApp1
             {
                 connectionticker++;
 
-                if (connectionticker == 100)
+                if (connectionticker == 5)
                 {
-                    tcp.Connect("127.0.0.1", 12345);
+                    tcp.Connect(ipadress, 12345);
+                    connectionticker = 0;
                 }
+
             }
 
         }
