@@ -19,7 +19,7 @@ namespace WpfApp1
         private Vector2 position;
         private double height;
         private double width;
-        private MessageOut m;
+        private MessageOutRoot m;
 
 
         public Trafficlights(string Id, Rectangle box, Vector2 position, double height, double width, MessageOut m)
@@ -30,7 +30,7 @@ namespace WpfApp1
             this.position = position;
             this.height = height;
             this.width = width;
-            this.m = m;
+            this.m = new MessageOutRoot(m);
         }
 
         public string gettrafficlightid(){ return this.Id; }
@@ -43,7 +43,7 @@ namespace WpfApp1
 
         public Rectangle GetRectangle() { return this.box;}
 
-        public MessageOut GetMessage() { return this.m;}
+        public MessageOutRoot GetMessage() { return this.m;}
 
         public int getcolor() { return color; }
 
@@ -65,6 +65,10 @@ namespace WpfApp1
             if (color == 2)
             {
                 box.Fill = Brushes.Green;
+            }
+            else if (color == 1)
+            {
+                box.Fill = Brushes.Orange;
             }
             else
             {

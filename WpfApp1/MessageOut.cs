@@ -18,6 +18,6 @@ namespace WpfApp1
 
         [DataMember]
         public int prioriteit;
-
+    
     }
 }

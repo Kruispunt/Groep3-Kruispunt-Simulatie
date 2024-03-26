@@ -12,6 +12,7 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 using System.Numerics;
 using Accessibility;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace WpfApp1
 {
@@ -20,7 +21,6 @@ namespace WpfApp1
     /// </summary>
     public partial class MainWindow : Window
     {
-        public int maxcar = 3;
         public Tcp tcp;
         public DispatcherTimer timer = new DispatcherTimer();
         public List<Car> CarsOnScreen = new List<Car>();
@@ -28,11 +28,11 @@ namespace WpfApp1
         public List<MessageOut> tobesendmessages = new List<MessageOut>();
         public List<MessageIn> receivedmessages = new List<MessageIn>();
         public int ticker;
-        public int Carticker;
         public int connectionticker;
         public int screenleft=800;
         public int screenbottom=450;
-        public string ipadress = "192.168.2.2";
+        public string ipadress = "127.0.0.1";
+        public MessageOutRoot message; //test
 
         public MainWindow()
         {
@@ -43,10 +43,9 @@ namespace WpfApp1
             Canvas.Focus();
 
             ticker = 0;
-            Carticker = 0;
             connectionticker = 0;
-            createnewtrafficlight(210,100,30,30, "A1");
-            createnewtrafficlight(210,600,30,30, "D1");
+            createnewtrafficlight(210,100,10,50, "A1");
+            createnewtrafficlight(210,600,10,50, "D1");
             CreateNewCar(210, 0, direction.East);
             
             tcp = new Tcp();
@@ -56,12 +55,10 @@ namespace WpfApp1
 
         public void Engine(object sender, EventArgs e)
         {
-            Carticker++;
-            if (Carticker == 200 && CarsOnScreen.Count()<maxcar)
-            {
-                CreateNewCar(210, 0, direction.East);
-                Carticker = 0;
-            }
+
+            reconnect();
+
+            messagesendandreceive();
 
             ticks();
 
@@ -69,11 +66,6 @@ namespace WpfApp1
 
             outabounds();
 
-            reconnect();
-
-            messagesend();
-
-            messagereceive();
         }
 
         public void ticks()
@@ -95,25 +87,33 @@ namespace WpfApp1
         {
             foreach (Trafficlights traffic in TrafficlightsOnScreen)
             {
-                Rect trafficbox = new Rect(Canvas.GetTop(traffic.GetRectangle()), Canvas.GetLeft(traffic.GetRectangle()), traffic.getwidth(), traffic.getheight());
+
+                Rect trafficbox = new Rect(Canvas.GetLeft(traffic.GetRectangle()), Canvas.GetTop(traffic.GetRectangle()), traffic.getwidth(), traffic.getheight());
 
                 for (int i = 0; i < CarsOnScreen.Count(); i++)
                 {
-                    Rect carbox = new Rect(Canvas.GetTop(CarsOnScreen[i].GetRectangle()), Canvas.GetLeft(CarsOnScreen[i].GetRectangle()), CarsOnScreen[i].getwidth(), CarsOnScreen[i].getheight());
+                    Rect carbox = new Rect(Canvas.GetLeft(CarsOnScreen[i].GetRectangle()), Canvas.GetTop(CarsOnScreen[i].GetRectangle()), CarsOnScreen[i].getwidth(), CarsOnScreen[i].getheight());
                     if (carbox.IntersectsWith(trafficbox))
                     {
                         CarsOnScreen[i].CheckTrafficLight(traffic);
-                        traffic.GetMessage().detectielus = 1;
-                        if (tobesendmessages.Contains(traffic.GetMessage()) == false)
-                        {
-                            tobesendmessages.Add(traffic.GetMessage());
+                        if (traffic.gettrafficlightid() == "A1") { 
+
+                            traffic.GetMessage().messageOut.detectielus = 1;
+                            traffic.GetMessage().send = false;
+                            message = traffic.GetMessage();
                         }
                     }
+                    else if(traffic.gettrafficlightid() == "A1")
+                    {
+                        traffic.GetMessage().messageOut.detectielus = 0;
+                        message = traffic.GetMessage();
+                        traffic.GetMessage().send = false;
+                    }
+
                 }
-
             }
+            
         }
-
 
         public void outabounds()
         {
@@ -151,8 +151,8 @@ namespace WpfApp1
             Rectangle newtraffic = new Rectangle
             {
                 Tag = "TrafficLight",
-                Height = width,
-                Width = height,
+                Height = height,
+                Width = width,
                 Fill = Brushes.Red
             };
 
@@ -162,38 +162,44 @@ namespace WpfApp1
 
             MessageOut m = new MessageOut();
             m.trafficlightid = id;
-            TrafficlightsOnScreen.Add(new Trafficlights(id,newtraffic, new Vector2(x,y),width,height,m));
+            TrafficlightsOnScreen.Add(new Trafficlights(id,newtraffic, new Vector2(x,y),height, width, m));
         }
 
         #endregion
 
-
         #region messages
-        public void messagereceive()
-        {
-            receivedmessages = tcp.receivemessages();
-            foreach (MessageIn messageIn in receivedmessages)
-            {
-                foreach (Trafficlights trafficlights in TrafficlightsOnScreen)
-                {
-                    if (messageIn.trafficlightid == trafficlights.gettrafficlightid())
-                    {
-                        trafficlights.setcolor(messageIn.color);
-                    }
-                }
-            }
-        }
 
-        public void messagesend()
+        public void messagesendandreceive()
         {
             ticker++;
-            if (ticker == 5)
+            if (ticker == 20)
             {
-                test.Text = tcp.sendmessages(tobesendmessages);
-                tobesendmessages.Clear();
+                if (message == null)
+                {
+                    return;
+                }
+
+                if (message.send==false)
+                {
+                    test.Text = tcp.sendmessages(message.messageOut);
+
+                    receivedmessages = tcp.receivemessages();
+                    test.Text = receivedmessages.Count().ToString();
+                    foreach (MessageIn messageIn in receivedmessages)
+                    {
+                        foreach (Trafficlights trafficlights in TrafficlightsOnScreen)
+                        {
+                            if (messageIn.trafficlightid == trafficlights.gettrafficlightid())
+                            {
+                                trafficlights.setcolor(messageIn.color);
+                            }
+                        }
+                    }
+                    receivedmessages.Clear();
+                    message.send = true;
+                }
                 ticker = 0;
             }
-
         }
         #endregion
 

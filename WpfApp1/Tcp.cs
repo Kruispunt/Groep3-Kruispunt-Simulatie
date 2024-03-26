@@ -15,6 +15,7 @@ namespace WpfApp1
         static byte[] data;  // 1
         static Socket socket; // 1
         static bool connected;
+        static Socket accepteddata;
 
         public Tcp()
         {
@@ -54,20 +55,23 @@ namespace WpfApp1
 
         public byte[] Receive()
         {
-            try { 
-            Socket accepteddata = socket.Accept(); 
-            data = new byte[accepteddata.SendBufferSize]; 
-            int j = accepteddata.Receive(data); 
-            byte[] adata = new byte[j];         
-            for (int i = 0; i < j; i++)         
-                adata[i] = data[i];             
-            accepteddata.Close();
-            return adata;
+            try
+            {
+                data = new byte[socket.SendBufferSize];
+                int j = socket.Receive(data);
+
+                byte[] adata = new byte[j];
+                for (int i = 0; i < j; i++)
+                    adata[i] = data[i];
+                //accepteddata.Close();
+                return adata;
             }
             catch
             {
                 return null;
             }
+
+
         }
 
         public void Close()
@@ -92,19 +96,40 @@ namespace WpfApp1
             return mes;
         }
 
+        public string sendmessages(MessageOut messages)
+        {
+            var stream1 = new MemoryStream();
+            var ser = new DataContractJsonSerializer(typeof(MessageOut));
+
+            ser.WriteObject(stream1, messages);
+
+            stream1.Position = 0;
+            var sr = new StreamReader(stream1);
+            string mes = sr.ReadToEnd();
+            Send(mes);
+            sr.Close();
+            return mes;
+        }
 
         public List<MessageIn> receivemessages()
         {
+            
             List<MessageIn> m2 = new List<MessageIn>();
-            if (Receive() == null)
+
+            Byte[] buffer = Receive();
+
+            if (buffer == null)
             {
                 return m2;
             }
-            var stream1 = new MemoryStream(Receive());
+
+            var stream1 = new MemoryStream(buffer);
             var ser = new DataContractJsonSerializer(typeof(MessageIn));
 
             stream1.Position = 0;
-            m2 = (List<MessageIn>)ser.ReadObject(stream1);
+            MessageIn a = ser.ReadObject(stream1) as MessageIn;
+
+            m2.Add(a);
 
             return m2;
         }
