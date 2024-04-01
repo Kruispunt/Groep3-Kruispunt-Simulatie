@@ -114,7 +114,7 @@ namespace WpfApp1
 
         public bool onpoint(Vector2 point)
         {
-            if (point.X>position.X-(width/2.0) && point.X < position.X + (width / 2.0)&& point.Y > position.Y - (height / 2.0)&&point.Y < position.Y + (width / 2.0))
+            if (point.X>position.X-((width/2.0)) && point.X < position.X + ((width / 2.0))&& point.Y > position.Y - ((height / 2.0))&&point.Y < position.Y + (height / 2.0))
             {
                 return true;
             }

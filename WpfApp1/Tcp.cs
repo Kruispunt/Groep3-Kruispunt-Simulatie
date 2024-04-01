@@ -89,8 +89,8 @@ namespace WpfApp1
             stream1.Position = 0;
             var sr = new StreamReader(stream1);
             string mes = sr.ReadToEnd();
-            //Send(mes);
-            //sr.Close();
+            Send(mes);
+            sr.Close();
             return mes;
         }
 

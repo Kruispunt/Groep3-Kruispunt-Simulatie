@@ -34,6 +34,7 @@ namespace WpfApp1
 
         public BlockOut()
         {
+            Cars = new List<CarRoadInfo>();
             Cars.Add(new CarRoadInfo());
             Cars.Add(new CarRoadInfo());
             Cars.Add(new CarRoadInfo());
@@ -44,8 +45,12 @@ namespace WpfApp1
     [DataContractAttribute]
     public class CarRoadInfo
     {
+        [DataMember]
         public bool DetectNear;
+        [DataMember]
         public bool DetectFar;
+        [DataMember]
         public bool PrioCar;
+
     }
 }

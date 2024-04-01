@@ -55,6 +55,7 @@ namespace WpfApp1
             this.direction = direction;
             this.futuredirection =futuredirection;
 
+
             this.loopfrontpos = loopfrontpos;
             this.loopbackpos = loopbackpos;
             this.turnposition = turnposition;
@@ -83,8 +84,6 @@ namespace WpfApp1
 
         public Direction getDirection() {  return this.direction; }
 
-        //public MessageOutRoot GetMessage() { return this.m;}
-
         public int getcolor() { return color; }
 
         public void setrectangle(Rectangle box) { this.box = box; }
@@ -104,18 +103,18 @@ namespace WpfApp1
                     }
 
                 }
+                else if (Onfrontloop != null && !Onfrontloop.onpoint(loopfrontpos))
+                {
+                    loopFront = false;
+                    Onfrontloop = null;
+                }
+
                 if (car.onpoint(loopbackpos) && loopBack == false)
                 {
                     loopBack = true;
                     Onbackloop = car;
                 }
-
-                if (Onfrontloop != null && !Onfrontloop.onpoint(loopfrontpos))
-                {
-                    loopFront = false;
-                    Onfrontloop = null;
-                }
-                if (Onbackloop != null && !Onbackloop.onpoint(loopbackpos))
+                else if (Onbackloop != null && !Onbackloop.onpoint(loopbackpos))
                 {
                     loopBack = false;
                     Onbackloop = null;
@@ -158,7 +157,7 @@ namespace WpfApp1
         {
             TickCounter++;
 
-            if(TickCounter == 100)
+            if(TickCounter == 200)
             {
                 if (color == 2)
                 {

@@ -24,11 +24,10 @@ namespace WpfApp1
         public Tcp tcp;
         public DispatcherTimer timer = new DispatcherTimer();
         public MessageOut messageOut= new MessageOut();
+        public MessageIn messagein= new MessageIn();
 
         public List<Car> CarsOnScreen = new List<Car>();
         public List<Trafficlights> TrafficlightsOnScreen = new List<Trafficlights>();
-        //public List<MessageOut> tobesendmessages = new List<MessageOut>();
-        //public List<MessageIn> receivedmessages = new List<MessageIn>();
 
         public List<Spawnpoint>spawnpoints = new List<Spawnpoint>(); 
 
@@ -58,14 +57,14 @@ namespace WpfApp1
             spawncars = 99;
             connectionticker = 0;
             
-            //tcp = new Tcp();
-            //tcp.Connect(ipadress, 12345);
+            tcp = new Tcp();
+            tcp.Connect(ipadress, 12345);
 
         }
 
         public void Engine(object sender, EventArgs e)
         {
-            updateMessage();
+
             if (spawncars >= 100 && CarsOnScreen.Count() < maxcars)
             {
                 CreateNewCar();
@@ -77,14 +76,15 @@ namespace WpfApp1
             }
 
 
-            reconnect();
-
-            messagesendandreceive();
+            //reconnect();
 
             ticks();
 
             outabounds();
 
+            updateMessage();
+
+            messagesendandreceive();
         }
 
 
@@ -93,22 +93,9 @@ namespace WpfApp1
             for(int i = 0;i< TrafficlightsOnScreen.Count(); i++)
             {
                 if (TrafficlightsOnScreen[i].getgroep()=='A') {
-                    if (TrafficlightsOnScreen[i].getid() == 0)
-                    {
-                        messageOut.A.Cars[0] = TrafficlightsOnScreen[i].GetCarRoadInfo();
-                    }
-                    else if (TrafficlightsOnScreen[i].getid() == 1)
-                    {
-                        messageOut.A.Cars[1] = TrafficlightsOnScreen[i].GetCarRoadInfo();
-                    }
-                    else if (TrafficlightsOnScreen[i].getid() == 2)
-                    {
-                        messageOut.A.Cars[2] = TrafficlightsOnScreen[i].GetCarRoadInfo();
-                    }
-                    else if (TrafficlightsOnScreen[i].getid() == 3)
-                    {
-                        messageOut.A.Cars[3] = TrafficlightsOnScreen[i].GetCarRoadInfo();
-                    }
+
+                    messageOut.A.Cars[i] = TrafficlightsOnScreen[i].GetCarRoadInfo();
+
                 }
             }
         }
@@ -152,11 +139,10 @@ namespace WpfApp1
 
         public void trafficlights()
         {
-            TrafficlightsOnScreen.Add(new Trafficlights(0, 'A', new Vector2(90, 200), new Vector2(80, 200), Direction.straight));//A1
-            TrafficlightsOnScreen.Add(new Trafficlights(1, 'A', new Vector2(90, 211), new Vector2(80, 211), Direction.straight));//A2
-            TrafficlightsOnScreen.Add(new Trafficlights(2, 'A', new Vector2(90, 222), new Vector2(80, 222), Direction.right, new Vector2(117, 222), Drivedirection.South));//A3
-            TrafficlightsOnScreen.Add(new Trafficlights(3, 'A', new Vector2(90, 233), new Vector2(80, 233), Direction.right, new Vector2(106, 233), Drivedirection.South));//A4
-
+            TrafficlightsOnScreen.Add(new Trafficlights(0, 'A', new Vector2(85, 200), new Vector2(60, 200), Direction.straight));//A1
+            TrafficlightsOnScreen.Add(new Trafficlights(1, 'A', new Vector2(85, 211), new Vector2(60, 211), Direction.straight));//A2
+            TrafficlightsOnScreen.Add(new Trafficlights(2, 'A', new Vector2(85, 222), new Vector2(60, 222), Direction.right, new Vector2(117, 222), Drivedirection.South));//A3
+            TrafficlightsOnScreen.Add(new Trafficlights(3, 'A', new Vector2(85, 233), new Vector2(60, 233), Direction.right, new Vector2(106, 233), Drivedirection.South));//A4
 
             foreach (Rectangle x in Canvas.Children.OfType<Rectangle>())
             {
@@ -195,42 +181,32 @@ namespace WpfApp1
             CarsOnScreen.Add(new Car(spawnpoint.getpoint().X, spawnpoint.getpoint().Y, newAuto,spawnpoint.GetDrivedirection(),20,30));
         }
 
-        #region messages
-
-
         public void messagesendandreceive()
         {
             ticker++;
-            if (ticker == 20)
+            if (ticker == 10)
             {
                 if (messageOut == null)
                 {
                     return;
                 }
 
-
                 test.Text = tcp.sendmessages(messageOut);
 
-                /*
-                receivedmessages = tcp.receivemessages();
-                test.Text = receivedmessages.Count().ToString();
-                foreach (MessageIn messageIn in receivedmessages)
+                
+                messagein = tcp.receivemessages();
+
+                for (int i = 0; i < TrafficlightsOnScreen.Count(); i++)
                 {
-                    foreach (Trafficlights trafficlights in TrafficlightsOnScreen)
+                    if (TrafficlightsOnScreen[i].getgroep() == 'A')
                     {
-                        if (messageIn.trafficlightid == trafficlights.gettrafficlightid())
-                        {
-                            trafficlights.setcolor(messageIn.color);
-                        }
+                        TrafficlightsOnScreen[i].setcolor(messagein.A.Cars[i]);
                     }
                 }
-                receivedmessages.Clear();
-                message.send = true;
-                */
+
                 ticker = 0;
             }
         }
-        #endregion
 
         public void reconnect()
         {

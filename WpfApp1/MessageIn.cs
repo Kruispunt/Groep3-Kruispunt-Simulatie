@@ -14,6 +14,8 @@ namespace WpfApp1
         public BlockIn A;
         //public BlockIn B;
         //public BlockIn C;
+
+        public MessageIn() { A = new BlockIn(); }
     }
 
     [DataContractAttribute]
@@ -24,6 +26,8 @@ namespace WpfApp1
         //list pedestrians
         //list cyclist
         //busses.
+
+        public BlockIn() {  Cars = new List<int>(); }
     }
 
 }

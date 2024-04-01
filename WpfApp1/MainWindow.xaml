@@ -15,10 +15,10 @@
         <Rectangle x:Name="RoadA4" Height="10" Width="100" Fill="Orange" Canvas.Left="0" Canvas.Top="233"/>
         <Rectangle x:Name="RoadA4afslag" Height="210" Width="10" Fill="Orange" Canvas.Left="99" Canvas.Top="233"/>
 
-        <Rectangle x:Name="A1" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="90" Canvas.Top="172"/>
-        <Rectangle x:Name="A2" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="90" Canvas.Top="178"/>
-        <Rectangle x:Name="A3" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="90" Canvas.Top="184"/>
-        <Rectangle x:Name="A4" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="90" Canvas.Top="190"/>
+        <Rectangle x:Name="A0" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="90" Canvas.Top="172"/>
+        <Rectangle x:Name="A1" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="90" Canvas.Top="178"/>
+        <Rectangle x:Name="A2" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="90" Canvas.Top="184"/>
+        <Rectangle x:Name="A3" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="90" Canvas.Top="190"/>
 
     </Canvas>
 </Window>
