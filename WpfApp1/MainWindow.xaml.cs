@@ -23,38 +23,59 @@ namespace WpfApp1
     {
         public Tcp tcp;
         public DispatcherTimer timer = new DispatcherTimer();
+        public MessageOut messageOut= new MessageOut();
+
         public List<Car> CarsOnScreen = new List<Car>();
         public List<Trafficlights> TrafficlightsOnScreen = new List<Trafficlights>();
-        public List<MessageOut> tobesendmessages = new List<MessageOut>();
-        public List<MessageIn> receivedmessages = new List<MessageIn>();
+        //public List<MessageOut> tobesendmessages = new List<MessageOut>();
+        //public List<MessageIn> receivedmessages = new List<MessageIn>();
+
+        public List<Spawnpoint>spawnpoints = new List<Spawnpoint>(); 
+
         public int ticker;
         public int connectionticker;
+
+        public int spawncars;
+        public int maxcars=4;
         public int screenleft=800;
         public int screenbottom=450;
         public string ipadress = "127.0.0.1";
-        public MessageOutRoot message; //test
+
 
         public MainWindow()
         {
             InitializeComponent();
+
             timer.Interval =TimeSpan.FromMilliseconds(20);
             timer.Tick += Engine;
             timer.Start();
             Canvas.Focus();
 
+            trafficlights();
+            Spawnpoints();
+
             ticker = 0;
+            spawncars = 99;
             connectionticker = 0;
-            createnewtrafficlight(210,100,10,50, "A1");
-            createnewtrafficlight(210,600,10,50, "D1");
-            CreateNewCar(210, 0, direction.East);
             
-            tcp = new Tcp();
-            tcp.Connect(ipadress, 12345);
+            //tcp = new Tcp();
+            //tcp.Connect(ipadress, 12345);
 
         }
 
         public void Engine(object sender, EventArgs e)
         {
+            updateMessage();
+            if (spawncars >= 100 && CarsOnScreen.Count() < maxcars)
+            {
+                CreateNewCar();
+                spawncars = 0;
+            }
+            else
+            {
+                spawncars++;
+            }
+
 
             reconnect();
 
@@ -62,10 +83,34 @@ namespace WpfApp1
 
             ticks();
 
-            CarTrafficlightintersect();
-
             outabounds();
 
+        }
+
+
+        public void updateMessage()
+        {
+            for(int i = 0;i< TrafficlightsOnScreen.Count(); i++)
+            {
+                if (TrafficlightsOnScreen[i].getgroep()=='A') {
+                    if (TrafficlightsOnScreen[i].getid() == 0)
+                    {
+                        messageOut.A.Cars[0] = TrafficlightsOnScreen[i].GetCarRoadInfo();
+                    }
+                    else if (TrafficlightsOnScreen[i].getid() == 1)
+                    {
+                        messageOut.A.Cars[1] = TrafficlightsOnScreen[i].GetCarRoadInfo();
+                    }
+                    else if (TrafficlightsOnScreen[i].getid() == 2)
+                    {
+                        messageOut.A.Cars[2] = TrafficlightsOnScreen[i].GetCarRoadInfo();
+                    }
+                    else if (TrafficlightsOnScreen[i].getid() == 3)
+                    {
+                        messageOut.A.Cars[3] = TrafficlightsOnScreen[i].GetCarRoadInfo();
+                    }
+                }
+            }
         }
 
         public void ticks()
@@ -73,6 +118,7 @@ namespace WpfApp1
             for (int i = 0; i < CarsOnScreen.Count(); i++)
             {
                 CarsOnScreen[i].Tick();
+                //add collision detect
                 Canvas.SetTop(CarsOnScreen[i].GetRectangle(),CarsOnScreen[i].getposition().Y);
                 Canvas.SetLeft(CarsOnScreen[i].GetRectangle(),CarsOnScreen[i].getposition().X);
             }
@@ -80,39 +126,8 @@ namespace WpfApp1
             for (int i = 0; i < TrafficlightsOnScreen.Count(); i++)
             {
                 TrafficlightsOnScreen[i].Tick();
+                TrafficlightsOnScreen[i].setloops(CarsOnScreen);
             }
-        }
-
-        public void CarTrafficlightintersect()
-        {
-            foreach (Trafficlights traffic in TrafficlightsOnScreen)
-            {
-
-                Rect trafficbox = new Rect(Canvas.GetLeft(traffic.GetRectangle()), Canvas.GetTop(traffic.GetRectangle()), traffic.getwidth(), traffic.getheight());
-
-                for (int i = 0; i < CarsOnScreen.Count(); i++)
-                {
-                    Rect carbox = new Rect(Canvas.GetLeft(CarsOnScreen[i].GetRectangle()), Canvas.GetTop(CarsOnScreen[i].GetRectangle()), CarsOnScreen[i].getwidth(), CarsOnScreen[i].getheight());
-                    if (carbox.IntersectsWith(trafficbox))
-                    {
-                        CarsOnScreen[i].CheckTrafficLight(traffic);
-                        if (traffic.gettrafficlightid() == "A1") { 
-
-                            traffic.GetMessage().messageOut.detectielus = 1;
-                            traffic.GetMessage().send = false;
-                            message = traffic.GetMessage();
-                        }
-                    }
-                    else if(traffic.gettrafficlightid() == "A1")
-                    {
-                        traffic.GetMessage().messageOut.detectielus = 0;
-                        message = traffic.GetMessage();
-                        traffic.GetMessage().send = false;
-                    }
-
-                }
-            }
-            
         }
 
         public void outabounds()
@@ -127,77 +142,91 @@ namespace WpfApp1
             }
         }
 
-
-        #region create
-        public void CreateNewCar( int y, int x, direction dir)
+        public void Spawnpoints()
         {
+            spawnpoints.Add(new Spawnpoint(new Vector2(0, 200),Drivedirection.East));
+            spawnpoints.Add(new Spawnpoint(new Vector2(0, 211),Drivedirection.East));
+            spawnpoints.Add(new Spawnpoint(new Vector2(0, 222),Drivedirection.East));
+            spawnpoints.Add(new Spawnpoint(new Vector2(0, 233),Drivedirection.East));
+        }
+
+        public void trafficlights()
+        {
+            TrafficlightsOnScreen.Add(new Trafficlights(0, 'A', new Vector2(90, 200), new Vector2(80, 200), Direction.straight));//A1
+            TrafficlightsOnScreen.Add(new Trafficlights(1, 'A', new Vector2(90, 211), new Vector2(80, 211), Direction.straight));//A2
+            TrafficlightsOnScreen.Add(new Trafficlights(2, 'A', new Vector2(90, 222), new Vector2(80, 222), Direction.right, new Vector2(117, 222), Drivedirection.South));//A3
+            TrafficlightsOnScreen.Add(new Trafficlights(3, 'A', new Vector2(90, 233), new Vector2(80, 233), Direction.right, new Vector2(106, 233), Drivedirection.South));//A4
+
+
+            foreach (Rectangle x in Canvas.Children.OfType<Rectangle>())
+            {
+                if ((string)x.Tag == "trafficlight")
+                {
+                    foreach (Trafficlights trafficlights in TrafficlightsOnScreen)
+                    {
+                        if ((string)x.Name == trafficlights.fullId())
+                        {
+                            trafficlights.setrectangle(x);
+                        }
+                    }
+                }
+            }
+
+        }
+
+        public void CreateNewCar()
+        {
+            Random r = new Random();
+            int i = r.Next(4);
+            Spawnpoint spawnpoint = spawnpoints[i];
+
             Rectangle newAuto = new Rectangle
             {
                 Tag = "Auto",
-                Height = 30,
-                Width = 20,
+                Height = 15,
+                Width = 10,
                 Fill = Brushes.Black
             };
             
-            Canvas.SetTop(newAuto, y);
-            Canvas.SetLeft(newAuto, x);
+            Canvas.SetTop(newAuto, spawnpoint.getpoint().Y);
+            Canvas.SetLeft(newAuto, spawnpoint.getpoint().X);
             Canvas.Children.Add(newAuto);
 
-            CarsOnScreen.Add(new Car(x,y,newAuto,dir,20,30));
+            CarsOnScreen.Add(new Car(spawnpoint.getpoint().X, spawnpoint.getpoint().Y, newAuto,spawnpoint.GetDrivedirection(),20,30));
         }
-
-        public void createnewtrafficlight(int y, int x, int width,int height, string id)
-        {
-            Rectangle newtraffic = new Rectangle
-            {
-                Tag = "TrafficLight",
-                Height = height,
-                Width = width,
-                Fill = Brushes.Red
-            };
-
-            Canvas.SetTop(newtraffic, y);
-            Canvas.SetLeft(newtraffic, x);
-            Canvas.Children.Add(newtraffic);
-
-            MessageOut m = new MessageOut();
-            m.trafficlightid = id;
-            TrafficlightsOnScreen.Add(new Trafficlights(id,newtraffic, new Vector2(x,y),height, width, m));
-        }
-
-        #endregion
 
         #region messages
+
 
         public void messagesendandreceive()
         {
             ticker++;
             if (ticker == 20)
             {
-                if (message == null)
+                if (messageOut == null)
                 {
                     return;
                 }
 
-                if (message.send==false)
-                {
-                    test.Text = tcp.sendmessages(message.messageOut);
 
-                    receivedmessages = tcp.receivemessages();
-                    test.Text = receivedmessages.Count().ToString();
-                    foreach (MessageIn messageIn in receivedmessages)
+                test.Text = tcp.sendmessages(messageOut);
+
+                /*
+                receivedmessages = tcp.receivemessages();
+                test.Text = receivedmessages.Count().ToString();
+                foreach (MessageIn messageIn in receivedmessages)
+                {
+                    foreach (Trafficlights trafficlights in TrafficlightsOnScreen)
                     {
-                        foreach (Trafficlights trafficlights in TrafficlightsOnScreen)
+                        if (messageIn.trafficlightid == trafficlights.gettrafficlightid())
                         {
-                            if (messageIn.trafficlightid == trafficlights.gettrafficlightid())
-                            {
-                                trafficlights.setcolor(messageIn.color);
-                            }
+                            trafficlights.setcolor(messageIn.color);
                         }
                     }
-                    receivedmessages.Clear();
-                    message.send = true;
                 }
+                receivedmessages.Clear();
+                message.send = true;
+                */
                 ticker = 0;
             }
         }

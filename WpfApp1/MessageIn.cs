@@ -11,9 +11,19 @@ namespace WpfApp1
     public class MessageIn
     {
         [DataMember]
-        public string trafficlightid;
-
-        [DataMember]
-        public int color;
+        public BlockIn A;
+        //public BlockIn B;
+        //public BlockIn C;
     }
+
+    [DataContractAttribute]
+    public class BlockIn
+    {
+        [DataMember]
+        public List<int> Cars;
+        //list pedestrians
+        //list cyclist
+        //busses.
+    }
+
 }

@@ -8,17 +8,17 @@
         Title="MainWindow" Height="450" Width="800">
     <Canvas x:Name="Canvas">
         <TextBlock x:Name="test">test</TextBlock>
-        <Rectangle x:Name="Road" Height="888" Width="20" Fill="Orange" Canvas.Left="388" Canvas.Top="-220" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Left" VerticalAlignment="Top">
-            <Rectangle.RenderTransform>
-                <TransformGroup>
-                    <ScaleTransform/>
-                    <SkewTransform/>
-                    <RotateTransform Angle="90"/>
-                    <TranslateTransform/>
-                </TransformGroup>
-            </Rectangle.RenderTransform>
-        </Rectangle>
-        
-    
+        <Rectangle x:Name="RoadA1" Height="10" Width="800" Fill="Orange" Canvas.Left="0" Canvas.Top="200"/>
+        <Rectangle x:Name="RoadA2" Height="10" Width="800" Fill="Orange" Canvas.Left="0" Canvas.Top="211"/>
+        <Rectangle x:Name="RoadA3" Height="10" Width="110" Fill="Orange" Canvas.Left="0" Canvas.Top="222"/>
+        <Rectangle x:Name="RoadA3afslag" Height="221" Width="10" Fill="Orange" Canvas.Left="110" Canvas.Top="222"/>
+        <Rectangle x:Name="RoadA4" Height="10" Width="100" Fill="Orange" Canvas.Left="0" Canvas.Top="233"/>
+        <Rectangle x:Name="RoadA4afslag" Height="210" Width="10" Fill="Orange" Canvas.Left="99" Canvas.Top="233"/>
+
+        <Rectangle x:Name="A1" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="90" Canvas.Top="172"/>
+        <Rectangle x:Name="A2" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="90" Canvas.Top="178"/>
+        <Rectangle x:Name="A3" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="90" Canvas.Top="184"/>
+        <Rectangle x:Name="A4" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="90" Canvas.Top="190"/>
+
     </Canvas>
 </Window>

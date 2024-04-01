@@ -14,38 +14,115 @@ namespace WpfApp1
     {
         private int TickCounter;
         private int color;
+        private int id;
+
+        private char groep;
+
+        private bool loopFront;
+        private bool loopBack;
+
         private Rectangle box;
-        private string Id;
-        private Vector2 position;
-        private double height;
-        private double width;
-        private MessageOutRoot m;
+        private Car Onfrontloop;
+        private Car Onbackloop;
 
+        private Vector2 turnposition;
+        private Vector2 loopfrontpos;//first loop point
+        private Vector2 loopbackpos;//second loop point
 
-        public Trafficlights(string Id, Rectangle box, Vector2 position, double height, double width, MessageOut m)
+        private Direction direction;
+        private Drivedirection futuredirection;
+
+        public Trafficlights(int id,char groep, Vector2 loopfrontpos, Vector2 loopbackpos, Direction direction)
         {
-            this.Id = Id;
+            this.id = id;
+            this.groep = groep;
+            this.direction = direction;
+
+            this.loopfrontpos = loopfrontpos;
+            this.loopbackpos = loopbackpos;
+
             color = 0;
-            this.box = box;
-            this.position = position;
-            this.height = height;
-            this.width = width;
-            this.m = new MessageOutRoot(m);
+            loopFront = false;
+            loopBack = false;
+
+            //this.m = new MessageOutRoot(m);
         }
 
-        public string gettrafficlightid(){ return this.Id; }
+        public Trafficlights(int id, char groep, Vector2 loopfrontpos, Vector2 loopbackpos, Direction direction, Vector2 turnposition,Drivedirection futuredirection)
+        {
+            this.id = id;
+            this.groep = groep;
+            this.direction = direction;
+            this.futuredirection =futuredirection;
 
-        public Vector2 getposition(){ return this.position;}
+            this.loopfrontpos = loopfrontpos;
+            this.loopbackpos = loopbackpos;
+            this.turnposition = turnposition;
 
-        public double getheight() { return this.height;}
-               
-        public double getwidth() { return this.width;}
+             color = 0;
+             loopFront = false;
+             loopBack = false;
 
-        public Rectangle GetRectangle() { return this.box;}
+             //this.m = new MessageOutRoot(m);
+        }
 
-        public MessageOutRoot GetMessage() { return this.m;}
+        public string fullId() { return groep.ToString() + id.ToString(); }
+
+        public int getid() { return id; }
+
+        public char getgroep() { return groep; }
+
+        public CarRoadInfo GetCarRoadInfo()
+        {
+            CarRoadInfo roadInfo = new CarRoadInfo();
+            roadInfo.DetectFar = loopBack;
+            roadInfo.DetectNear = loopFront;
+            roadInfo.PrioCar = false; 
+            return roadInfo;
+        }
+
+        public Direction getDirection() {  return this.direction; }
+
+        //public MessageOutRoot GetMessage() { return this.m;}
 
         public int getcolor() { return color; }
+
+        public void setrectangle(Rectangle box) { this.box = box; }
+
+        public void setloops(List<Car> cars)
+        {
+            foreach (Car car in cars)
+            {
+                if (car.onpoint(loopfrontpos) && loopFront == false)
+                {
+                    loopFront = true;
+                    car.setwaitingtrafficlight(this);
+                    Onfrontloop = car;
+                    if(direction==Direction.right||direction == Direction.left)
+                    {
+                        car.setturningpoint(turnposition,futuredirection);
+                    }
+
+                }
+                if (car.onpoint(loopbackpos) && loopBack == false)
+                {
+                    loopBack = true;
+                    Onbackloop = car;
+                }
+
+                if (Onfrontloop != null && !Onfrontloop.onpoint(loopfrontpos))
+                {
+                    loopFront = false;
+                    Onfrontloop = null;
+                }
+                if (Onbackloop != null && !Onbackloop.onpoint(loopbackpos))
+                {
+                    loopBack = false;
+                    Onbackloop = null;
+                }
+
+            }
+        }
 
         public void setcolor(int color)
         {
@@ -55,7 +132,7 @@ namespace WpfApp1
 
         public void Tick()
         {
-            //colorchangetest();
+            colorchangetest();
             colorchange();
 
         }
@@ -81,7 +158,7 @@ namespace WpfApp1
         {
             TickCounter++;
 
-            if(TickCounter == 50)
+            if(TickCounter == 100)
             {
                 if (color == 2)
                 {
@@ -101,3 +178,5 @@ namespace WpfApp1
 
     }
 }
+
+public enum Direction {straight, right,left }

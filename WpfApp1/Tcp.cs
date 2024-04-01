@@ -79,23 +79,6 @@ namespace WpfApp1
             socket.Close();
         }
 
-        public string sendmessages(List<MessageOut> messages)
-        {
-            var stream1 = new MemoryStream();
-            var ser = new DataContractJsonSerializer(typeof(MessageOut));
-
-            foreach(MessageOut m in messages)
-            {
-                ser.WriteObject(stream1, m);
-            }
-            stream1.Position = 0;
-            var sr = new StreamReader(stream1);
-            string mes = sr.ReadToEnd();
-            Send(mes);
-            sr.Close();
-            return mes;
-        }
-
         public string sendmessages(MessageOut messages)
         {
             var stream1 = new MemoryStream();
@@ -106,30 +89,25 @@ namespace WpfApp1
             stream1.Position = 0;
             var sr = new StreamReader(stream1);
             string mes = sr.ReadToEnd();
-            Send(mes);
-            sr.Close();
+            //Send(mes);
+            //sr.Close();
             return mes;
         }
 
-        public List<MessageIn> receivemessages()
+        public MessageIn receivemessages()
         {
-            
-            List<MessageIn> m2 = new List<MessageIn>();
-
             Byte[] buffer = Receive();
 
             if (buffer == null)
             {
-                return m2;
+                return new MessageIn();
             }
 
             var stream1 = new MemoryStream(buffer);
             var ser = new DataContractJsonSerializer(typeof(MessageIn));
 
             stream1.Position = 0;
-            MessageIn a = ser.ReadObject(stream1) as MessageIn;
-
-            m2.Add(a);
+            MessageIn m2 = ser.ReadObject(stream1) as MessageIn;
 
             return m2;
         }
