@@ -9,44 +9,20 @@ using System.Windows.Controls;
 
 namespace WpfApp1
 {
-    public class Car
+    public class Car:Vehicle
     {
-        private int TickCounter;
-        private Rectangle box;
-        private Vector2 position;
-        private Drivedirection direction;
         private Drivedirection futuredir;
-        private double width;
-        private double height;
-        private bool driving;
-        private Trafficlights lightwaiting;
+        private CarTrafficLight lightwaiting;
         private Vector2 turningpoint;
+        private bool turning;
         
-        public Car(float x, float y, Rectangle box, Drivedirection direction,double width,double height) {
-            TickCounter = 0;
-            position.X = x;
-            position.Y = y;
-            this.box = box;
-            this.width = width;
-            this.height = height;
-            driving = true;
-            setrotation(direction);
-        }
-
-        public void setrotation(Drivedirection drivedirection)
+        public Car(float x, float y, Rectangle box, Drivedirection direction,float width,float height, int speed) :base(x,y,box,direction,width,height,speed)
         {
-            direction=drivedirection;
-            if(direction==Drivedirection.North || direction == Drivedirection.South)
-            {
-                resize(10, 15);
-            }
-            if (direction == Drivedirection.East || direction == Drivedirection.West)
-            {
-                resize(15, 10);
-            }
+            setrotation(direction);
+            turning = false;
         }
 
-        public void setwaitingtrafficlight(Trafficlights trafficlights) { lightwaiting = trafficlights; }
+        public void setwaitingtrafficlight(CarTrafficLight trafficlights) { lightwaiting = trafficlights; }
 
         public void setturningpoint(Vector2 turningpoint, Drivedirection futuredir) 
         { 
@@ -54,87 +30,71 @@ namespace WpfApp1
             this.futuredir = futuredir;
         }
 
-        public Rectangle GetRectangle()
-        {
-            return box;
-        }
-
-        public Vector2 getposition()
-        {
-            return position;
-        }
-
-        public void resize(double w, double h) 
-        {
-            width = w;
-            height = h;
-            box.Height = height;
-            box.Width = width;
-        
-        }
-
-        public void Tick()
+        public override void Tick()
         {
             if (lightwaiting != null)
             {
                 CheckTrafficLight(lightwaiting);
             }
 
-            if (driving)
-            {
-                Move();
-            }
-        }
-
-        public void Move()
-        {
-            if (onpoint(turningpoint) == true)
+            if (onpoint(turningpoint) == true && turning == false)
             {
                 setrotation(futuredir);
+                setposition(turningpoint);
+                turning = true;
+            }
 
-            }
-            if(direction == Drivedirection.North)
+            if(onpoint(turningpoint) == false && turning == true)
             {
-                position.Y = position.Y - 1;
+                turning = false;
             }
-            else if(direction == Drivedirection.South)
-            {
-                position.Y = position.Y + 1;
-            }
-            else if (direction == Drivedirection.West)
-            {
-                position.X = position.X - 1;
-            }
-            else if(direction == Drivedirection.East)
-            {
-                position.X = position.X + 1;
-            }
+
+            base.Tick();
         }
-        //add turn movements
 
         public bool onpoint(Vector2 point)
         {
-            if (point.X>position.X-((width/2.0)) && point.X < position.X + ((width / 2.0))&& point.Y > position.Y - ((height / 2.0))&&point.Y < position.Y + (height / 2.0))
+            if (point.X>getposition().X-((GetWidth()/2.0)) && point.X < getposition().X + ((GetWidth() / 2.0))&& point.Y > getposition().Y - ((GetHeight() / 2.0))&&point.Y < getposition().Y + (GetHeight() / 2.0))
             {
                 return true;
             }
             return false;
         }
 
-        public void CheckTrafficLight(Trafficlights trafficlights)
+        public void CheckTrafficLight(CarTrafficLight trafficlights)
         {
             if (trafficlights.getcolor() == 0)
             {
-                driving = false;
+                setMoving(false);
                 lightwaiting = trafficlights;
             }
             else
             {
-                driving = true;
+                setMoving(true);
                 lightwaiting = null;
             }
         }
 
+        public bool closeby(Vector2 point)
+        {
+
+            if (getdirection() == Drivedirection.North || getdirection() == Drivedirection.South)
+            {
+                if (point.X > getposition().X - ((GetWidth() / 2.0)+1) && point.X < getposition().X + ((GetWidth() / 2.0)+1) && point.Y > getposition().Y - ((GetHeight() / 2.0) + 15) && point.Y < getposition().Y + ((GetHeight() / 2.0) + 15))
+                {
+                    return true;
+                }
+            }
+            else if (getdirection() == Drivedirection.East || getdirection() == Drivedirection.West)
+            {
+                if (point.X > getposition().X - ((GetWidth() / 2.0)+15) && point.X < getposition().X + ((GetWidth() / 2.0) + 15) && point.Y > getposition().Y - ((GetHeight() / 2.0)+1) && point.Y < getposition().Y + ((GetHeight() / 2.0)+1))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
     }
 }
-public enum Drivedirection {North,South,West,East }

@@ -5,20 +5,99 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp1"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Canvas x:Name="Canvas">
+        Title="MainWindow" Height="900" Width="1600">
+    <Canvas x:Name="Canvas" Background="DarkSlateBlue">
         <TextBlock x:Name="test">test</TextBlock>
-        <Rectangle x:Name="RoadA1" Height="10" Width="800" Fill="Orange" Canvas.Left="0" Canvas.Top="200"/>
-        <Rectangle x:Name="RoadA2" Height="10" Width="800" Fill="Orange" Canvas.Left="0" Canvas.Top="211"/>
-        <Rectangle x:Name="RoadA3" Height="10" Width="110" Fill="Orange" Canvas.Left="0" Canvas.Top="222"/>
-        <Rectangle x:Name="RoadA3afslag" Height="221" Width="10" Fill="Orange" Canvas.Left="110" Canvas.Top="222"/>
-        <Rectangle x:Name="RoadA4" Height="10" Width="100" Fill="Orange" Canvas.Left="0" Canvas.Top="233"/>
-        <Rectangle x:Name="RoadA4afslag" Height="210" Width="10" Fill="Orange" Canvas.Left="99" Canvas.Top="233"/>
 
-        <Rectangle x:Name="A0" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="90" Canvas.Top="172"/>
-        <Rectangle x:Name="A1" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="90" Canvas.Top="178"/>
-        <Rectangle x:Name="A2" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="90" Canvas.Top="184"/>
-        <Rectangle x:Name="A3" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="90" Canvas.Top="190"/>
 
+        <Rectangle x:Name="RoadE3" Height="350" Width="10"         Fill="LightGray" Canvas.Left="900" Canvas.Top="0"/>
+        <Rectangle x:Name="RoadE2" Height="365" Width="10"         Fill="LightGray" Canvas.Left="911" Canvas.Top="0"/>
+        <Rectangle x:Name="RoadE1" Height="440" Width="10"         Fill="LightGray" Canvas.Left="922" Canvas.Top="0"/>
+        <Rectangle x:Name="RoadEbus" Height="430" Width="10"         Fill="DarkGray" Canvas.Left="933" Canvas.Top="0"/>
+
+        <Rectangle x:Name="RoadBbus" Height="472" Width="10"         Fill="DarkGray" Canvas.Left="184" Canvas.Top="412"/>
+
+        <Rectangle x:Name="RoadC1" Height="10" Width="1600"         Fill="LightGray" Canvas.Left="0" Canvas.Top="348"/>
+        <Rectangle x:Name="RoadC2" Height="10" Width="1600"         Fill="LightGray" Canvas.Left="0" Canvas.Top="359"/>
+        <Rectangle x:Name="RoadC3" Height="10" Width="1500"         Fill="LightGray" Canvas.Left="100" Canvas.Top="370"/>
+        <Rectangle x:Name="RoadC4" Height="10" Width="1489"         Fill="LightGray" Canvas.Left="111" Canvas.Top="381"/>
+        
+        <Rectangle x:Name="RoadC3afslag" Height="100" Width="10"    Fill="LightGray" Canvas.Left="100" Canvas.Top="370"/>
+        <Rectangle x:Name="RoadC4afslag" Height="100" Width="10"    Fill="LightGray" Canvas.Left="111" Canvas.Top="381"/>
+
+
+        <Rectangle x:Name="RoadA1" Height="10" Width="964"          Fill="LightGray" Canvas.Left="0" Canvas.Top="400"/>
+        <Rectangle x:Name="RoadA2" Height="10" Width="976"          Fill="LightGray" Canvas.Left="0" Canvas.Top="411"/>
+        <Rectangle x:Name="RoadA3" Height="10" Width="112"          Fill="LightGray" Canvas.Left="0" Canvas.Top="422"/>
+        <Rectangle x:Name="RoadA4" Height="10" Width="100"          Fill="LightGray" Canvas.Left="0" Canvas.Top="433"/>
+        
+        <Rectangle x:Name="RoadA3afslag" Height="462" Width="10"    Fill="LightGray" Canvas.Left="111" Canvas.Top="422"/>
+        <Rectangle x:Name="RoadA4afslag" Height="451" Width="10"    Fill="LightGray" Canvas.Left="100" Canvas.Top="433"/>
+        
+        <Rectangle x:Name="RoadB1" Height="525" Width="10"          Fill="LightGray" Canvas.Left="140" Canvas.Top="360"/>
+        <Rectangle x:Name="RoadB2" Height="535" Width="10"          Fill="LightGray" Canvas.Left="151" Canvas.Top="350"/>
+        <Rectangle x:Name="RoadB3" Height="485" Width="10"          Fill="LightGray" Canvas.Left="162" Canvas.Top="400"/>
+        <Rectangle x:Name="RoadB4" Height="473" Width="10"          Fill="LightGray" Canvas.Left="173" Canvas.Top="412"/>
+
+        <Rectangle x:Name="RoadD1" Height="10" Width="1400"         Fill="LightGray" Canvas.Left="200" Canvas.Top="422"/>
+        <Rectangle x:Name="RoadDafslag" Height="30" Width="10"      Fill="LightGray" Canvas.Left="200" Canvas.Top="412"/>
+        <Rectangle x:Name="RoadD2" Height="10" Width="1400"         Fill="LightGray" Canvas.Left="200" Canvas.Top="433"/>
+
+
+        <Rectangle x:Name="RoadE3back" Height="410" Width="10"         Fill="LightGray" Canvas.Left="955" Canvas.Top="0"/>
+        <Rectangle x:Name="RoadE2back" Height="420" Width="10"         Fill="LightGray" Canvas.Left="966" Canvas.Top="0"/>
+
+        
+        
+        
+
+        <Rectangle x:Name="A0" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="70" Canvas.Top="400"/>
+        <Rectangle x:Name="A1" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="70" Canvas.Top="411"/>
+        <Rectangle x:Name="A2" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="70" Canvas.Top="422"/>
+        <Rectangle x:Name="A3" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="70" Canvas.Top="433"/>
+
+        <Rectangle x:Name="B0" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="140" Canvas.Top="470"/>
+        <Rectangle x:Name="B1" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="151" Canvas.Top="470"/>
+        <Rectangle x:Name="B2" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="162" Canvas.Top="470"/>
+        <Rectangle x:Name="B3" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="173" Canvas.Top="470"/> 
+        
+        <Rectangle x:Name="C0" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="180" Canvas.Top="381"/>
+        <Rectangle x:Name="C1" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="180" Canvas.Top="370"/>
+        <Rectangle x:Name="C2" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="180" Canvas.Top="359"/>
+        <Rectangle x:Name="C3" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="180" Canvas.Top="348"/>
+
+        <Rectangle x:Name="D0" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="910" Canvas.Top="400"/>
+        <Rectangle x:Name="D1" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="910" Canvas.Top="411"/>
+        <Rectangle x:Name="D2" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="910" Canvas.Top="422"/>
+        <Rectangle x:Name="D3" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="910" Canvas.Top="433"/>
+
+        <Rectangle x:Name="E2" Tag="trafficlight"      Height="5" Width="5"  Fill="Red" Canvas.Left="900" Canvas.Top="310"/>
+        <Rectangle x:Name="E1" Tag="trafficlight"      Height="5" Width="5"  Fill="Red" Canvas.Left="911" Canvas.Top="310"/>
+        <Rectangle x:Name="E0" Tag="trafficlight"      Height="5" Width="5"  Fill="Red" Canvas.Left="922" Canvas.Top="310"/>
+
+        <Rectangle x:Name="F0" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="1000" Canvas.Top="381"/>
+        <Rectangle x:Name="F1" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="1000" Canvas.Top="370"/>
+        <Rectangle x:Name="F2" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="1000" Canvas.Top="359"/>
+        <Rectangle x:Name="F3" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="1000" Canvas.Top="348"/>
+
+
+        <Rectangle x:Name="BBus0" Tag="trafficlightB" Height="5" Width="5"  Fill="Red" Canvas.Left="184" Canvas.Top="470"/>
+        <Rectangle x:Name="EBus0" Tag="trafficlightB" Height="5" Width="5"  Fill="Red" Canvas.Left="933" Canvas.Top="310"/>
+
+        <Rectangle x:Name="A1bycle" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="85" Canvas.Top="444"/>
+        <Rectangle x:Name="A0bycle" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="85" Canvas.Top="342"/>
+
+        <Rectangle x:Name="B0bycle" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="93"  Canvas.Top="450"/>
+        <Rectangle x:Name="B1bycle" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="196" Canvas.Top="450"/>
+
+
+        <Rectangle x:Name="E1bycle" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="893" Canvas.Top="330"/>
+        <Rectangle x:Name="E0bycle" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="978" Canvas.Top="330"/>
+                             
+        <Rectangle x:Name="F1bycle" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="985" Canvas.Top="340"/>
+        <Rectangle x:Name="F0bycle" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="985" Canvas.Top="446"/>
+
+        
+        
     </Canvas>
 </Window>

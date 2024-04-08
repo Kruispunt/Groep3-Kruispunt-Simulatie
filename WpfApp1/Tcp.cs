@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Runtime.Serialization.Json;
+using System.Diagnostics;
 
 namespace WpfApp1
 {
@@ -40,6 +41,7 @@ namespace WpfApp1
             catch (Exception ex)
             {
                 connected = false;
+                Trace.WriteLine("failed to connect");
             }
 
         }
@@ -47,8 +49,8 @@ namespace WpfApp1
         public void Send(string q)
         {
             try { 
-            byte[] data = Encoding.UTF8.GetBytes(q);    
-            socket.Send(data);
+                byte[] data = Encoding.UTF8.GetBytes(q);
+                socket.Send(data);
             }
             catch { }
         }
@@ -79,10 +81,10 @@ namespace WpfApp1
             socket.Close();
         }
 
-        public string sendmessages(MessageOut messages)
+        public string sendmessages(Mainmessage messages)
         {
             var stream1 = new MemoryStream();
-            var ser = new DataContractJsonSerializer(typeof(MessageOut));
+            var ser = new DataContractJsonSerializer(typeof(Mainmessage));
 
             ser.WriteObject(stream1, messages);
 
@@ -94,20 +96,21 @@ namespace WpfApp1
             return mes;
         }
 
-        public MessageIn receivemessages()
+        public MainMessageIn receivemessages()
         {
             Byte[] buffer = Receive();
 
             if (buffer == null)
             {
-                return new MessageIn();
+                return new MainMessageIn();
             }
 
             var stream1 = new MemoryStream(buffer);
-            var ser = new DataContractJsonSerializer(typeof(MessageIn));
+            var ser = new DataContractJsonSerializer(typeof(MainMessageIn));
 
             stream1.Position = 0;
-            MessageIn m2 = ser.ReadObject(stream1) as MessageIn;
+            //Trace.WriteLine(System.Text.Encoding.Default.GetString(buffer));
+            MainMessageIn m2 = ser.ReadObject(stream1) as MainMessageIn;
 
             return m2;
         }

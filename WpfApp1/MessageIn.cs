@@ -8,26 +8,89 @@ using System.Threading.Tasks;
 namespace WpfApp1
 {
     [DataContractAttribute]
-    public class MessageIn
+    public class MainMessageIn
+    {
+        [DataMember(Name = "1")]
+        public MessageIn1 messageIn1;
+        [DataMember(Name = "2")]
+        public MessageIn2 messageIn2;
+
+        public MainMessageIn()
+        {
+            messageIn1 = new MessageIn1();
+            messageIn2 = new MessageIn2();  
+        }
+    }
+
+
+
+    [DataContractAttribute]
+    public class MessageIn1
     {
         [DataMember]
-        public BlockIn A;
-        //public BlockIn B;
-        //public BlockIn C;
+        public BlockinPedCyc A;
+        [DataMember]
+        public Blockinbus B;
+        [DataMember]
+        public BlockIn C;
 
-        public MessageIn() { A = new BlockIn(); }
+        public MessageIn1() { 
+            A = new BlockinPedCyc(); 
+            B = new Blockinbus(); 
+            C = new BlockIn(); 
+        }
     }
+
+    public class MessageIn2
+    {
+        [DataMember]
+        public BlockIn D;
+        [DataMember]
+        public Blockinbus E;
+        [DataMember]
+        public BlockinPedCyc F;
+
+        public MessageIn2()
+        {
+            D = new BlockIn();
+            E = new Blockinbus();
+            F = new BlockinPedCyc();
+        }
+    }
+
 
     [DataContractAttribute]
     public class BlockIn
     {
         [DataMember]
         public List<int> Cars;
-        //list pedestrians
-        //list cyclist
-        //busses.
 
-        public BlockIn() {  Cars = new List<int>(); }
+        public BlockIn() {  
+            Cars = new List<int>(); 
+        }
+    }
+
+    public class BlockinPedCyc :BlockIn
+    {
+        [DataMember]
+        public List<int> Cyclists;
+        [DataMember]
+        public List<int> Pedestrians;
+        public BlockinPedCyc():base()
+        {
+            Cyclists = new List<int>();
+            Pedestrians = new List<int>();
+        }
+
+    }
+    public class Blockinbus:BlockinPedCyc
+    {
+        [DataMember]
+        public List<int> Busses;
+
+        public Blockinbus():base() {
+            Busses = new List<int>();
+        }
     }
 
 }
