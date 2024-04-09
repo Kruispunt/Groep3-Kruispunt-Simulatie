@@ -36,7 +36,7 @@ namespace WpfApp1
         public MessageOut2()
         {
             D = new BlockOutCarOnly(4);
-            E = new BlockOutBus(4,4,2,3);
+            E = new BlockOutBus(3,4,2,3);
             F = new BlockOut(4,4,2);
         }
     }
