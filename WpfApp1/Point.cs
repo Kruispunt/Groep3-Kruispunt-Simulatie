@@ -13,18 +13,23 @@ namespace WpfApp1
 
         private Drivedirection Drivedirection;
 
-        public Point(Vector2 point, Drivedirection Drivedirection) {
+        private Spawnpointtype spawnpoint;
+
+        public Point(Vector2 point, Drivedirection Drivedirection, Spawnpointtype spawnpoint) {
             this.point = point; 
             this.Drivedirection = Drivedirection;
+            this.spawnpoint = spawnpoint;
         }
         public Vector2 getpoint() { return point; }
         public Drivedirection GetDrivedirection() { return Drivedirection; }
+
+        public Spawnpointtype getspawnpointtype() { return spawnpoint; }
     }
 
     public class Turnpoint:Point {
 
         private bool required;
-        public Turnpoint(Vector2 point, Drivedirection Drivedirection, bool required):base(point, Drivedirection)
+        public Turnpoint(Vector2 point, Drivedirection Drivedirection, bool required, Spawnpointtype spawnpoint) : base(point, Drivedirection,spawnpoint)
         {
             this.required = required;
         }
@@ -40,7 +45,7 @@ namespace WpfApp1
         private bool x;
         private float endpoint;
 
-        public Switchlanepoint(Vector2 point, Drivedirection Drivedirection, bool required, bool x, float endpoint) : base(point, Drivedirection, required)
+        public Switchlanepoint(Vector2 point, Drivedirection Drivedirection, bool required, bool x, float endpoint, Spawnpointtype spawnpoint) : base(point, Drivedirection, required,spawnpoint)
         {
             this.x = x;
             this.endpoint = endpoint;
@@ -51,3 +56,4 @@ namespace WpfApp1
 
     }
 }
+public enum Spawnpointtype {Car,Bus,Bicycle,Pedestrian}

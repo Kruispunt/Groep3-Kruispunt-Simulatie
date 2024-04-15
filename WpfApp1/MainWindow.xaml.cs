@@ -40,7 +40,8 @@ namespace WpfApp1
         public int connectionticker;
 
         public int spawncars;
-        public int maxcars=100;
+        public int spawnbus;
+        public int maxentities=300;
         public int screenleft=1600;
         public int screenbottom=900;
         public string ipadress = "127.0.0.1";
@@ -63,6 +64,7 @@ namespace WpfApp1
 
             ticker = 0;
             spawncars = 9;
+            spawnbus = 9;
             connectionticker = 0;
 
             tcp = new Tcp();
@@ -73,16 +75,7 @@ namespace WpfApp1
 
         public void Engine(object sender, EventArgs e)
         {
-
-            if (spawncars >= 10 && vehicles.Count() < maxcars)
-            {
-                CreateNewCar();
-                spawncars = 0;
-            }
-            else
-            {
-                spawncars++;
-            }
+            spawn();
 
             reconnect();
 
@@ -95,58 +88,6 @@ namespace WpfApp1
             updateMessage();
 
             messagesendandreceive();
-        }
-
-        public void updateMessage()
-        {
-            for(int i = 0;i< TrafficlightsOnScreen.Count(); i++)
-            {
-                //todo add pedestrians and add cyclists
-
-                if (TrafficlightsOnScreen[i].GettrafficType() == typeTrafficlight.Carlight)
-                {
-                    switch (TrafficlightsOnScreen[i].getgroep())
-                    {
-                        case 'A':
-                            message1.messageOut1.A.Cars[TrafficlightsOnScreen[i].getid()] = (CarRoadInfo)TrafficlightsOnScreen[i].GetRoadInfo();
-                            break;                                                                                      
-                        case 'B':                                                                                       
-                            message1.messageOut1.B.Cars[TrafficlightsOnScreen[i].getid()] = (CarRoadInfo)TrafficlightsOnScreen[i].GetRoadInfo();
-                            break;                                                                                      
-                        case 'C':                                                                                       
-                            message1.messageOut1.C.Cars[TrafficlightsOnScreen[i].getid()] = (CarRoadInfo)TrafficlightsOnScreen[i].GetRoadInfo();
-                            break;                                                                                      
-                        case 'D':                                                                                       
-                            message1.messageOut2.D.Cars[TrafficlightsOnScreen[i].getid()] = (CarRoadInfo)TrafficlightsOnScreen[i].GetRoadInfo();
-                            break;                                                                                      
-                        case 'E':                                                                                       
-                            message1.messageOut2.E.Cars[TrafficlightsOnScreen[i].getid()] = (CarRoadInfo)TrafficlightsOnScreen[i].GetRoadInfo();
-                            break;                                                                                      
-                        case 'F':                                                                                       
-                            message1.messageOut2.F.Cars[TrafficlightsOnScreen[i].getid()] = (CarRoadInfo)TrafficlightsOnScreen[i].GetRoadInfo();
-                            break;
-                    }
-                }
-
-                if (TrafficlightsOnScreen[i].GettrafficType() == typeTrafficlight.Cyclistlight)
-                {
-                    switch (TrafficlightsOnScreen[i].getgroep())
-                    {
-                        case 'A':
-                            message1.messageOut1.A.Cyclists[TrafficlightsOnScreen[i].getid()] = (CyclistRoadInfo)TrafficlightsOnScreen[i].GetRoadInfo();
-                            break;
-                        case 'B':
-                            message1.messageOut1.B.Cyclists[TrafficlightsOnScreen[i].getid()] = (CyclistRoadInfo)TrafficlightsOnScreen[i].GetRoadInfo();
-                            break;
-                        case 'E':
-                            message1.messageOut2.E.Cyclists[TrafficlightsOnScreen[i].getid()] = (CyclistRoadInfo)TrafficlightsOnScreen[i].GetRoadInfo();
-                            break;
-                        case 'F':
-                            message1.messageOut2.F.Cyclists[TrafficlightsOnScreen[i].getid()] = (CyclistRoadInfo)TrafficlightsOnScreen[i].GetRoadInfo();
-                            break;
-                    }
-                }
-            }
         }
 
         public void ticks()
@@ -202,98 +143,24 @@ namespace WpfApp1
             }
         }
 
-        public void PointSet()
+
+        //----------------------------create vehicles--------------------------------
+
+        public void spawn()
         {
-            //-----------------------SpawnPoints------------------------------------
-            //a points
-            spawnpoints.Add(new Point(new Vector2(0, 400),Drivedirection.East));
-            spawnpoints.Add(new Point(new Vector2(0, 411),Drivedirection.East));
-            spawnpoints.Add(new Point(new Vector2(0, 422),Drivedirection.East));
-            spawnpoints.Add(new Point(new Vector2(0, 433),Drivedirection.East));
-                                
-            //b points          
-            spawnpoints.Add(new Point(new Vector2(140, 900),Drivedirection.North));
-            spawnpoints.Add(new Point(new Vector2(151, 900),Drivedirection.North));
-            spawnpoints.Add(new Point(new Vector2(162, 900),Drivedirection.North));
-            spawnpoints.Add(new Point(new Vector2(173, 900),Drivedirection.North));
-                                
-            //F points          
-            spawnpoints.Add(new Point(new Vector2(1600, 381), Drivedirection.West));
-            spawnpoints.Add(new Point(new Vector2(1600, 370), Drivedirection.West));
-            spawnpoints.Add(new Point(new Vector2(1600, 359), Drivedirection.West));
-            spawnpoints.Add(new Point(new Vector2(1600, 348), Drivedirection.West));
-                                
-            //e points         
-            spawnpoints.Add(new Point(new Vector2(922, 0), Drivedirection.South));
-            spawnpoints.Add(new Point(new Vector2(911, 0), Drivedirection.South));
-            spawnpoints.Add(new Point(new Vector2(900, 0), Drivedirection.South));
-
-            //--------------------------turnpoints---------------------------------
-
-            //--------------------------Changelanepoints---------------------------------
-        }
-
-        public void trafficlights()
-        {
-            TrafficlightsOnScreen.Add(new CarTrafficLight(0, 'A', new Vector2(50, 400), new Vector2(25, 400), Direction.straight));//A0
-            TrafficlightsOnScreen.Add(new CarTrafficLight(1, 'A', new Vector2(50, 411), new Vector2(25, 411), Direction.straight));//A1
-            TrafficlightsOnScreen.Add(new CarTrafficLight(2, 'A', new Vector2(50, 422), new Vector2(25, 422), Direction.right, new Vector2(111, 422), Drivedirection.South));//A2
-            TrafficlightsOnScreen.Add(new CarTrafficLight(3, 'A', new Vector2(50, 433), new Vector2(25, 433), Direction.right, new Vector2(100, 433), Drivedirection.South));//A3
-
-            TrafficlightsOnScreen.Add(new CarTrafficLight(0, 'B', new Vector2(140, 480), new Vector2(140, 505), Direction.left,  new Vector2(140, 359), Drivedirection.West));//B0 
-            TrafficlightsOnScreen.Add(new CarTrafficLight(1, 'B', new Vector2(151, 480), new Vector2(151, 505), Direction.left,  new Vector2(151, 348), Drivedirection.West));//B1 
-            TrafficlightsOnScreen.Add(new CarTrafficLight(2, 'B', new Vector2(162, 480), new Vector2(162, 505), Direction.right, new Vector2(162, 400), Drivedirection.East));//B2 
-            TrafficlightsOnScreen.Add(new CarTrafficLight(3, 'B', new Vector2(173, 480), new Vector2(173, 505), Direction.right, new Vector2(173, 411), Drivedirection.East));//B3 
-
-            TrafficlightsOnScreen.Add(new CarTrafficLight(0, 'C', new Vector2(185, 381), new Vector2(210, 381), Direction.left, new Vector2(104, 381), Drivedirection.South));//C0
-            TrafficlightsOnScreen.Add(new CarTrafficLight(1, 'C', new Vector2(185, 370), new Vector2(210, 370), Direction.left, new Vector2(93, 370), Drivedirection.South));//C1
-            TrafficlightsOnScreen.Add(new CarTrafficLight(2, 'C', new Vector2(185, 359), new Vector2(210, 359), Direction.straight)); //C2 
-            TrafficlightsOnScreen.Add(new CarTrafficLight(3, 'C', new Vector2(185, 348), new Vector2(210, 348), Direction.straight)); //C3 
-
-
-            TrafficlightsOnScreen.Add(new CarTrafficLight(0, 'D', new Vector2(890, 400), new Vector2(865, 400), Direction.left, new Vector2(955,400),Drivedirection.North));//D0
-            TrafficlightsOnScreen.Add(new CarTrafficLight(1, 'D', new Vector2(890, 411), new Vector2(865, 411), Direction.left, new Vector2(966,411),Drivedirection.North));//D1
-            TrafficlightsOnScreen.Add(new CarTrafficLight(2, 'D', new Vector2(890, 422), new Vector2(865, 422), Direction.straight));//D2
-            TrafficlightsOnScreen.Add(new CarTrafficLight(3, 'D', new Vector2(890, 433), new Vector2(865, 433), Direction.straight));//D3
-                                                                                                                                     
-            TrafficlightsOnScreen.Add(new CarTrafficLight(0, 'E', new Vector2(922, 290), new Vector2(922, 265), Direction.left, new Vector2(922, 433), Drivedirection.East));//E1 
-            TrafficlightsOnScreen.Add(new CarTrafficLight(1, 'E', new Vector2(911, 290), new Vector2(911, 265), Direction.right, new Vector2(911, 359), Drivedirection.West));//E2
-            TrafficlightsOnScreen.Add(new CarTrafficLight(2, 'E', new Vector2(900, 290), new Vector2(900, 265), Direction.right, new Vector2(900, 348), Drivedirection.West));//E3
-
-            TrafficlightsOnScreen.Add(new CarTrafficLight(0, 'F', new Vector2(1010, 381), new Vector2(1035, 381), Direction.straight));//F0
-            TrafficlightsOnScreen.Add(new CarTrafficLight(1, 'F', new Vector2(1010, 370), new Vector2(1035, 370), Direction.straight));//F1
-            TrafficlightsOnScreen.Add(new CarTrafficLight(2, 'F', new Vector2(1010, 359), new Vector2(1035, 359), Direction.right, new Vector2(966, 359), Drivedirection.North));//F2
-            TrafficlightsOnScreen.Add(new CarTrafficLight(3, 'F', new Vector2(1010, 348), new Vector2(1035, 348), Direction.right, new Vector2(955, 348), Drivedirection.North));//F3
-
-
-
-            //-------------------------add cyclist lights--------------------- //todo change loop points
-            TrafficlightsOnScreen.Add(new BicycleTrafficLight(0, 'A', new Vector2(922, 290)));//A0 
-            TrafficlightsOnScreen.Add(new BicycleTrafficLight(1, 'A', new Vector2(922, 290)));//A1 
-
-            TrafficlightsOnScreen.Add(new BicycleTrafficLight(0, 'B', new Vector2(922, 290)));//A1 
-            TrafficlightsOnScreen.Add(new BicycleTrafficLight(1, 'B', new Vector2(922, 290)));//A1 
-
-            TrafficlightsOnScreen.Add(new BicycleTrafficLight(0, 'E', new Vector2(922, 290)));//A1 
-            TrafficlightsOnScreen.Add(new BicycleTrafficLight(1, 'E', new Vector2(922, 290)));//A1 
-
-            TrafficlightsOnScreen.Add(new BicycleTrafficLight(0, 'F', new Vector2(922, 290)));//A1 
-            TrafficlightsOnScreen.Add(new BicycleTrafficLight(1, 'F', new Vector2(922, 290)));//A1 
-
-            foreach (Rectangle x in Canvas.Children.OfType<Rectangle>())
+            if (spawnbus >= 50 && vehicles.Count() < maxentities)
             {
-                if ((string)x.Tag == "trafficlight")
-                {
-                    foreach (TrafficLight trafficlights in TrafficlightsOnScreen)
-                    {
-                        if ((string)x.Name == trafficlights.fullId())
-                        {
-                            trafficlights.setrectangle(x);
-                        }
-                    }
-                }
+                CreateNewBus();
+                spawnbus = 0;
             }
+            else { spawnbus++; }
 
+            if (spawncars >= 10 && vehicles.Count() < maxentities)
+            {
+                CreateNewCar();
+                spawncars = 0;
+            }
+            else{ spawncars++; }
         }
 
         public void CreateNewCar()
@@ -301,6 +168,12 @@ namespace WpfApp1
             Random r = new Random();
             int i = r.Next(spawnpoints.Count());
             Point spawnpoint = spawnpoints[i];
+
+            while(spawnpoint.getspawnpointtype() != Spawnpointtype.Car)
+            {
+                i = r.Next(spawnpoints.Count());
+                spawnpoint = spawnpoints[i];
+            }
 
             Rectangle newAuto = new Rectangle
             {
@@ -315,6 +188,90 @@ namespace WpfApp1
             Canvas.Children.Add(newAuto);
 
             vehicles.Add(new Car(spawnpoint.getpoint().X, spawnpoint.getpoint().Y, newAuto,spawnpoint.GetDrivedirection(),10,15,carspeed));
+        }
+
+        public void CreateNewBus()
+        {
+
+            Random r = new Random();
+            int i = r.Next(spawnpoints.Count());
+            Point spawnpoint = spawnpoints[i];
+
+            while (spawnpoint.getspawnpointtype() != Spawnpointtype.Bus)
+            {
+                i = r.Next(spawnpoints.Count());
+                spawnpoint = spawnpoints[i];
+            }
+
+            Rectangle newBus = new Rectangle
+            {
+                Tag = "Bus",
+                Height = 15,
+                Width = 10,
+                Fill = Brushes.CornflowerBlue
+            };
+
+            Canvas.SetTop(newBus, spawnpoint.getpoint().Y);
+            Canvas.SetLeft(newBus, spawnpoint.getpoint().X);
+            Canvas.Children.Add(newBus);
+
+            i = r.Next(10);
+
+            vehicles.Add(new Bus(spawnpoint.getpoint().X, spawnpoint.getpoint().Y, newBus, spawnpoint.GetDrivedirection(), 10, 15, carspeed,i));
+        }
+
+        //---------------------------messages and connection-------------------------
+
+        public void updateMessage()
+        {
+            for (int i = 0; i < TrafficlightsOnScreen.Count(); i++)
+            {
+                //todo add pedestrians and add cyclists
+
+                if (TrafficlightsOnScreen[i].GettrafficType() == typeTrafficlight.Carlight)
+                {
+                    switch (TrafficlightsOnScreen[i].getgroep())
+                    {
+                        case 'A':
+                            message1.messageOut1.A.Cars[TrafficlightsOnScreen[i].getid()] = (CarRoadInfo)TrafficlightsOnScreen[i].GetRoadInfo();
+                            break;
+                        case 'B':
+                            message1.messageOut1.B.Cars[TrafficlightsOnScreen[i].getid()] = (CarRoadInfo)TrafficlightsOnScreen[i].GetRoadInfo();
+                            break;
+                        case 'C':
+                            message1.messageOut1.C.Cars[TrafficlightsOnScreen[i].getid()] = (CarRoadInfo)TrafficlightsOnScreen[i].GetRoadInfo();
+                            break;
+                        case 'D':
+                            message1.messageOut2.D.Cars[TrafficlightsOnScreen[i].getid()] = (CarRoadInfo)TrafficlightsOnScreen[i].GetRoadInfo();
+                            break;
+                        case 'E':
+                            message1.messageOut2.E.Cars[TrafficlightsOnScreen[i].getid()] = (CarRoadInfo)TrafficlightsOnScreen[i].GetRoadInfo();
+                            break;
+                        case 'F':
+                            message1.messageOut2.F.Cars[TrafficlightsOnScreen[i].getid()] = (CarRoadInfo)TrafficlightsOnScreen[i].GetRoadInfo();
+                            break;
+                    }
+                }
+
+                if (TrafficlightsOnScreen[i].GettrafficType() == typeTrafficlight.Cyclistlight)
+                {
+                    switch (TrafficlightsOnScreen[i].getgroep())
+                    {
+                        case 'A':
+                            message1.messageOut1.A.Cyclists[TrafficlightsOnScreen[i].getid()] = (CyclistRoadInfo)TrafficlightsOnScreen[i].GetRoadInfo();
+                            break;
+                        case 'B':
+                            message1.messageOut1.B.Cyclists[TrafficlightsOnScreen[i].getid()] = (CyclistRoadInfo)TrafficlightsOnScreen[i].GetRoadInfo();
+                            break;
+                        case 'E':
+                            message1.messageOut2.E.Cyclists[TrafficlightsOnScreen[i].getid()] = (CyclistRoadInfo)TrafficlightsOnScreen[i].GetRoadInfo();
+                            break;
+                        case 'F':
+                            message1.messageOut2.F.Cyclists[TrafficlightsOnScreen[i].getid()] = (CyclistRoadInfo)TrafficlightsOnScreen[i].GetRoadInfo();
+                            break;
+                    }
+                }
+            }
         }
 
         public void messagesendandreceive()
@@ -406,5 +363,150 @@ namespace WpfApp1
             }
 
         }
+
+        //--------------------------------initialisation-----------------------------
+
+        public void PointSet()
+        {
+            //-----------------------SpawnPoints------------------------------------
+            //a points
+            spawnpoints.Add(new Point(new Vector2(0, 400), Drivedirection.East, Spawnpointtype.Car));
+            spawnpoints.Add(new Point(new Vector2(0, 411), Drivedirection.East, Spawnpointtype.Car));
+            spawnpoints.Add(new Point(new Vector2(0, 422), Drivedirection.East, Spawnpointtype.Car));
+            spawnpoints.Add(new Point(new Vector2(0, 433), Drivedirection.East, Spawnpointtype.Car));
+
+            //b points          
+            spawnpoints.Add(new Point(new Vector2(140, 900), Drivedirection.North, Spawnpointtype.Car));
+            spawnpoints.Add(new Point(new Vector2(151, 900), Drivedirection.North, Spawnpointtype.Car));
+            spawnpoints.Add(new Point(new Vector2(162, 900), Drivedirection.North, Spawnpointtype.Car));
+            spawnpoints.Add(new Point(new Vector2(173, 900), Drivedirection.North, Spawnpointtype.Car));
+
+            //F points          
+            spawnpoints.Add(new Point(new Vector2(1600, 381), Drivedirection.West, Spawnpointtype.Car));
+            spawnpoints.Add(new Point(new Vector2(1600, 370), Drivedirection.West, Spawnpointtype.Car));
+            spawnpoints.Add(new Point(new Vector2(1600, 359), Drivedirection.West, Spawnpointtype.Car));
+            spawnpoints.Add(new Point(new Vector2(1600, 348), Drivedirection.West, Spawnpointtype.Car));
+
+            //e points         
+            spawnpoints.Add(new Point(new Vector2(922, 0), Drivedirection.South, Spawnpointtype.Car));
+            spawnpoints.Add(new Point(new Vector2(911, 0), Drivedirection.South, Spawnpointtype.Car));
+            spawnpoints.Add(new Point(new Vector2(900, 0), Drivedirection.South, Spawnpointtype.Car));
+
+            //bus points
+            spawnpoints.Add(new Point(new Vector2(184, 900), Drivedirection.North, Spawnpointtype.Bus));
+            spawnpoints.Add(new Point(new Vector2(933, 0), Drivedirection.South, Spawnpointtype.Bus));
+
+            //--------------------------turnpoints---------------------------------
+
+            //--------------------------Changelanepoints---------------------------------
+        }
+
+        public void trafficlights()
+        {
+            //-------------------------------------------------------------------------------Car------------------------------------------------------------------------------------------
+            TrafficlightsOnScreen.Add(new CarTrafficLight(0, 'A', new Vector2(50, 400), new Vector2(25, 400), Direction.straight));//A0
+            TrafficlightsOnScreen.Add(new CarTrafficLight(1, 'A', new Vector2(50, 411), new Vector2(25, 411), Direction.straight));//A1
+            TrafficlightsOnScreen.Add(new CarTrafficLight(2, 'A', new Vector2(50, 422), new Vector2(25, 422), Direction.right, new Vector2(111, 422), Drivedirection.South));//A2
+            TrafficlightsOnScreen.Add(new CarTrafficLight(3, 'A', new Vector2(50, 433), new Vector2(25, 433), Direction.right, new Vector2(100, 433), Drivedirection.South));//A3
+
+            TrafficlightsOnScreen.Add(new CarTrafficLight(0, 'B', new Vector2(140, 480), new Vector2(140, 505), Direction.left, new Vector2(140, 359), Drivedirection.West));//B0 
+            TrafficlightsOnScreen.Add(new CarTrafficLight(1, 'B', new Vector2(151, 480), new Vector2(151, 505), Direction.left, new Vector2(151, 348), Drivedirection.West));//B1 
+            TrafficlightsOnScreen.Add(new CarTrafficLight(2, 'B', new Vector2(162, 480), new Vector2(162, 505), Direction.right, new Vector2(162, 400), Drivedirection.East));//B2 
+            TrafficlightsOnScreen.Add(new CarTrafficLight(3, 'B', new Vector2(173, 480), new Vector2(173, 505), Direction.right, new Vector2(173, 411), Drivedirection.East));//B3 
+
+            TrafficlightsOnScreen.Add(new CarTrafficLight(0, 'C', new Vector2(205, 381), new Vector2(230, 381), Direction.left, new Vector2(111, 381), Drivedirection.South));//C0
+            TrafficlightsOnScreen.Add(new CarTrafficLight(1, 'C', new Vector2(205, 370), new Vector2(230, 370), Direction.left, new Vector2(100, 370), Drivedirection.South));//C1
+            TrafficlightsOnScreen.Add(new CarTrafficLight(2, 'C', new Vector2(205, 359), new Vector2(230, 359), Direction.straight)); //C2 
+            TrafficlightsOnScreen.Add(new CarTrafficLight(3, 'C', new Vector2(205, 348), new Vector2(230, 348), Direction.straight)); //C3 
+
+
+            TrafficlightsOnScreen.Add(new CarTrafficLight(0, 'D', new Vector2(890, 400), new Vector2(865, 400), Direction.left, new Vector2(955, 400), Drivedirection.North));//D0
+            TrafficlightsOnScreen.Add(new CarTrafficLight(1, 'D', new Vector2(890, 411), new Vector2(865, 411), Direction.left, new Vector2(966, 411), Drivedirection.North));//D1
+            TrafficlightsOnScreen.Add(new CarTrafficLight(2, 'D', new Vector2(890, 422), new Vector2(865, 422), Direction.straight));//D2
+            TrafficlightsOnScreen.Add(new CarTrafficLight(3, 'D', new Vector2(890, 433), new Vector2(865, 433), Direction.straight));//D3
+
+            TrafficlightsOnScreen.Add(new CarTrafficLight(0, 'E', new Vector2(922, 290), new Vector2(922, 265), Direction.left, new Vector2(922, 433), Drivedirection.East));//E1 
+            TrafficlightsOnScreen.Add(new CarTrafficLight(1, 'E', new Vector2(911, 290), new Vector2(911, 265), Direction.right, new Vector2(911, 359), Drivedirection.West));//E2
+            TrafficlightsOnScreen.Add(new CarTrafficLight(2, 'E', new Vector2(900, 290), new Vector2(900, 265), Direction.right, new Vector2(900, 348), Drivedirection.West));//E3
+
+            TrafficlightsOnScreen.Add(new CarTrafficLight(0, 'F', new Vector2(1010, 381), new Vector2(1035, 381), Direction.straight));//F0
+            TrafficlightsOnScreen.Add(new CarTrafficLight(1, 'F', new Vector2(1010, 370), new Vector2(1035, 370), Direction.straight));//F1
+            TrafficlightsOnScreen.Add(new CarTrafficLight(2, 'F', new Vector2(1010, 359), new Vector2(1035, 359), Direction.right, new Vector2(966, 359), Drivedirection.North));//F2
+            TrafficlightsOnScreen.Add(new CarTrafficLight(3, 'F', new Vector2(1010, 348), new Vector2(1035, 348), Direction.right, new Vector2(955, 348), Drivedirection.North));//F3
+
+            //-------------------------------------------------------------------------------BUS-------------------------------------------------------------------------------------------
+            BusTrafficLight E0 = new BusTrafficLight(0, 'E', Direction.left, new Vector2(933, 290), new Vector2(933, 422), Drivedirection.East);
+            BusTrafficLight E1 = new BusTrafficLight(1, 'E', Direction.right, new Vector2(933, 290), new Vector2(933, 359), Drivedirection.West);
+
+            E0.setneighbour(E1);
+            E1.setneighbour(E0);
+
+            TrafficlightsOnScreen.Add(E0);//E1 
+            TrafficlightsOnScreen.Add(E1);//E2
+
+            BusTrafficLight B0 = new BusTrafficLight(0, 'B', Direction.left, new Vector2(184, 480), new Vector2(184, 348), Drivedirection.West);
+            BusTrafficLight B1 = new BusTrafficLight(1, 'B', Direction.right, new Vector2(184, 480), new Vector2(184, 433), Drivedirection.East);
+
+            B0.setneighbour(B1);
+            B1.setneighbour(B0);
+
+            TrafficlightsOnScreen.Add(B0);//E1 
+            TrafficlightsOnScreen.Add(B1);//E2
+
+            //-------------------------------------------------------------------------------bicycle---------------------------------------------------------------------------------------
+            //todo change loop points
+            TrafficlightsOnScreen.Add(new BicycleTrafficLight(0, 'A', new Vector2(922, 290)));//A0 
+            TrafficlightsOnScreen.Add(new BicycleTrafficLight(1, 'A', new Vector2(922, 290)));//A1 
+
+            TrafficlightsOnScreen.Add(new BicycleTrafficLight(0, 'B', new Vector2(922, 290)));//A1 
+            TrafficlightsOnScreen.Add(new BicycleTrafficLight(1, 'B', new Vector2(922, 290)));//A1 
+
+            TrafficlightsOnScreen.Add(new BicycleTrafficLight(0, 'E', new Vector2(922, 290)));//A1 
+            TrafficlightsOnScreen.Add(new BicycleTrafficLight(1, 'E', new Vector2(922, 290)));//A1 
+
+            TrafficlightsOnScreen.Add(new BicycleTrafficLight(0, 'F', new Vector2(922, 290)));//A1 
+            TrafficlightsOnScreen.Add(new BicycleTrafficLight(1, 'F', new Vector2(922, 290)));//A1 
+
+
+            //-------------------------------------------------------------------------------pedestrian------------------------------------------------------------------------------------
+
+            TrafficlightsOnScreen.Add(new PedestrianTrafficlight(0, 'A'));//A0 
+            TrafficlightsOnScreen.Add(new PedestrianTrafficlight(1, 'A'));//A1 
+            TrafficlightsOnScreen.Add(new PedestrianTrafficlight(2, 'A'));//A1 
+            TrafficlightsOnScreen.Add(new PedestrianTrafficlight(3, 'A'));//A1 
+                                          
+            TrafficlightsOnScreen.Add(new PedestrianTrafficlight(0, 'B'));//A1 
+            TrafficlightsOnScreen.Add(new PedestrianTrafficlight(1, 'B'));//A1 
+            TrafficlightsOnScreen.Add(new PedestrianTrafficlight(2, 'B'));//A1 
+            TrafficlightsOnScreen.Add(new PedestrianTrafficlight(3, 'B'));//A1 
+                                          
+            TrafficlightsOnScreen.Add(new PedestrianTrafficlight(0, 'E'));//A1 
+            TrafficlightsOnScreen.Add(new PedestrianTrafficlight(1, 'E'));//A1 
+            TrafficlightsOnScreen.Add(new PedestrianTrafficlight(2, 'E'));//A1 
+            TrafficlightsOnScreen.Add(new PedestrianTrafficlight(3, 'E'));//A1 
+                                          
+            TrafficlightsOnScreen.Add(new PedestrianTrafficlight(0, 'F'));//A1 
+            TrafficlightsOnScreen.Add(new PedestrianTrafficlight(1, 'F'));//A1 
+            TrafficlightsOnScreen.Add(new PedestrianTrafficlight(2, 'F'));//A1 
+            TrafficlightsOnScreen.Add(new PedestrianTrafficlight(3, 'F'));//A1 
+
+
+
+            foreach (Rectangle x in Canvas.Children.OfType<Rectangle>())
+            {
+                if ((string)x.Tag == "trafficlight")
+                {
+                    foreach (TrafficLight trafficlights in TrafficlightsOnScreen)
+                    {
+                        if ((string)x.Name == trafficlights.fullId())
+                        {
+                            trafficlights.setrectangle(x);
+                        }
+                    }
+                }
+            }
+
+        }
+
     }
 }

@@ -20,7 +20,7 @@ namespace WpfApp1
         private bool moving;
         private int speed;
 
-
+        private TrafficLight lightwaiting;
 
 
         public Vehicle(float x, float y, Rectangle box, Drivedirection direction, float width, float height, int speed) {
@@ -33,6 +33,8 @@ namespace WpfApp1
             this.direction = direction;
             this.speed = speed;
         }
+
+        public virtual void setwaitingtrafficlight(TrafficLight trafficlights) {}
 
         public void setMoving(bool moving) { this.moving = moving; }
 
@@ -48,6 +50,8 @@ namespace WpfApp1
         public void setposition(Vector2 pos){ position = pos; }
 
         public void setspeed(int speed) { this.speed = speed; }
+
+        public virtual void CheckTrafficLight(TrafficLight trafficlights){}
 
         public virtual void Tick()
         {

@@ -9,13 +9,18 @@
     <Canvas x:Name="Canvas" Background="DarkSlateBlue">
         <TextBlock x:Name="test">test</TextBlock>
 
+        <Rectangle x:Name="bycle1" Height="5" Width="1600"         Fill="LightPink" Canvas.Left="0" Canvas.Top="330"/>
+        <Rectangle x:Name="bycle2" Height="555" Width="5"         Fill="LightPink" Canvas.Left="85" Canvas.Top="330"/>
+        <Rectangle x:Name="bycle3" Height="555" Width="5"         Fill="LightPink" Canvas.Left="985" Canvas.Top="330"/>
+        <Rectangle x:Name="bycle4" Height="5" Width="1600"         Fill="LightPink" Canvas.Left="0" Canvas.Top="450"/>
 
         <Rectangle x:Name="RoadE3" Height="350" Width="10"         Fill="LightGray" Canvas.Left="900" Canvas.Top="0"/>
         <Rectangle x:Name="RoadE2" Height="365" Width="10"         Fill="LightGray" Canvas.Left="911" Canvas.Top="0"/>
         <Rectangle x:Name="RoadE1" Height="440" Width="10"         Fill="LightGray" Canvas.Left="922" Canvas.Top="0"/>
         <Rectangle x:Name="RoadEbus" Height="430" Width="10"         Fill="DarkGray" Canvas.Left="933" Canvas.Top="0"/>
 
-        <Rectangle x:Name="RoadBbus" Height="472" Width="10"         Fill="DarkGray" Canvas.Left="184" Canvas.Top="412"/>
+        <Rectangle x:Name="RoadBbus" Height="516" Width="10"         Fill="DarkGray" Canvas.Left="184" Canvas.Top="369"/>
+        <Rectangle x:Name="RoadBbus2" Height="10" Width="20"         Fill="DarkGray" Canvas.Left="184" Canvas.Top="433"/>
 
         <Rectangle x:Name="RoadC1" Height="10" Width="1600"         Fill="LightGray" Canvas.Left="0" Canvas.Top="348"/>
         <Rectangle x:Name="RoadC2" Height="10" Width="1600"         Fill="LightGray" Canvas.Left="0" Canvas.Top="359"/>
@@ -61,10 +66,10 @@
         <Rectangle x:Name="B2" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="162" Canvas.Top="470"/>
         <Rectangle x:Name="B3" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="173" Canvas.Top="470"/> 
         
-        <Rectangle x:Name="C0" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="180" Canvas.Top="381"/>
-        <Rectangle x:Name="C1" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="180" Canvas.Top="370"/>
-        <Rectangle x:Name="C2" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="180" Canvas.Top="359"/>
-        <Rectangle x:Name="C3" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="180" Canvas.Top="348"/>
+        <Rectangle x:Name="C0" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="200" Canvas.Top="381"/>
+        <Rectangle x:Name="C1" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="200" Canvas.Top="370"/>
+        <Rectangle x:Name="C2" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="200" Canvas.Top="359"/>
+        <Rectangle x:Name="C3" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="200" Canvas.Top="348"/>
 
         <Rectangle x:Name="D0" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="910" Canvas.Top="400"/>
         <Rectangle x:Name="D1" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="910" Canvas.Top="411"/>
@@ -81,8 +86,11 @@
         <Rectangle x:Name="F3" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="1000" Canvas.Top="348"/>
 
 
-        <Rectangle x:Name="BBus0" Tag="trafficlightB" Height="5" Width="5"  Fill="Red" Canvas.Left="184" Canvas.Top="470"/>
-        <Rectangle x:Name="EBus0" Tag="trafficlightB" Height="5" Width="5"  Fill="Red" Canvas.Left="933" Canvas.Top="310"/>
+        <Rectangle x:Name="B0Bus" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="184" Canvas.Top="470"/>
+        <Rectangle x:Name="B1Bus" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="189" Canvas.Top="470"/>
+        
+        <Rectangle x:Name="E1Bus" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="933" Canvas.Top="310"/>
+        <Rectangle x:Name="E0Bus" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="938" Canvas.Top="310"/>
 
         <Rectangle x:Name="A1bycle" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="85" Canvas.Top="444"/>
         <Rectangle x:Name="A0bycle" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="85" Canvas.Top="342"/>
@@ -90,14 +98,31 @@
         <Rectangle x:Name="B0bycle" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="93"  Canvas.Top="450"/>
         <Rectangle x:Name="B1bycle" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="196" Canvas.Top="450"/>
 
-
         <Rectangle x:Name="E1bycle" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="893" Canvas.Top="330"/>
         <Rectangle x:Name="E0bycle" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="978" Canvas.Top="330"/>
                              
         <Rectangle x:Name="F1bycle" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="985" Canvas.Top="340"/>
-        <Rectangle x:Name="F0bycle" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="985" Canvas.Top="446"/>
+        <Rectangle x:Name="F0bycle" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="985" Canvas.Top="445"/>
 
-        
-        
+        <Rectangle x:Name="A3Pedes" Tag="trafficlight" Height="3" Width="3"  Fill="Red" Canvas.Left="80" Canvas.Top="444"/>
+        <Rectangle x:Name="A2Pedes" Tag="trafficlight" Height="3" Width="3"  Fill="Red" Canvas.Left="80" Canvas.Top="396"/>
+        <Rectangle x:Name="A1Pedes" Tag="trafficlight" Height="3" Width="3"  Fill="Red" Canvas.Left="80" Canvas.Top="370"/>
+        <Rectangle x:Name="A0Pedes" Tag="trafficlight" Height="3" Width="3"  Fill="Red" Canvas.Left="80" Canvas.Top="344"/>
+
+        <Rectangle x:Name="B0Pedes" Tag="trafficlight" Height="3" Width="3"  Fill="Red" Canvas.Left="95" Canvas.Top="457"/>
+        <Rectangle x:Name="B1Pedes" Tag="trafficlight" Height="3" Width="3"  Fill="Red" Canvas.Left="123" Canvas.Top="457"/>
+        <Rectangle x:Name="B2Pedes" Tag="trafficlight" Height="3" Width="3"  Fill="Red" Canvas.Left="136" Canvas.Top="457"/>
+        <Rectangle x:Name="B3Pedes" Tag="trafficlight" Height="3" Width="3"  Fill="Red" Canvas.Left="196" Canvas.Top="457"/>
+
+        <Rectangle x:Name="F0Pedes" Tag="trafficlight" Height="3" Width="3"  Fill="Red" Canvas.Left="992" Canvas.Top="444"/>
+        <Rectangle x:Name="F1Pedes" Tag="trafficlight" Height="3" Width="3"  Fill="Red" Canvas.Left="992" Canvas.Top="418"/>
+        <Rectangle x:Name="F2Pedes" Tag="trafficlight" Height="3" Width="3"  Fill="Red" Canvas.Left="992" Canvas.Top="392"/>
+        <Rectangle x:Name="F3Pedes" Tag="trafficlight" Height="3" Width="3"  Fill="Red" Canvas.Left="992" Canvas.Top="344"/>
+
+        <Rectangle x:Name="E0Pedes" Tag="trafficlight" Height="3" Width="3"  Fill="Red" Canvas.Left="979" Canvas.Top="326"/>
+        <Rectangle x:Name="E1Pedes" Tag="trafficlight" Height="3" Width="3"  Fill="Red" Canvas.Left="952" Canvas.Top="326"/>
+        <Rectangle x:Name="E2Pedes" Tag="trafficlight" Height="3" Width="3"  Fill="Red" Canvas.Left="943" Canvas.Top="326"/>
+        <Rectangle x:Name="E3Pedes" Tag="trafficlight" Height="3" Width="3"  Fill="Red" Canvas.Left="896" Canvas.Top="326"/>
+
     </Canvas>
 </Window>

@@ -21,8 +21,8 @@ namespace WpfApp1
             setrotation(direction);
             turning = false;
         }
-
-        public void setwaitingtrafficlight(CarTrafficLight trafficlights) { lightwaiting = trafficlights; }
+        
+        public override void setwaitingtrafficlight(TrafficLight trafficlights) { lightwaiting = (CarTrafficLight)trafficlights; }
 
         public void setturningpoint(Vector2 turningpoint, Drivedirection futuredir) 
         { 
