@@ -25,6 +25,7 @@ namespace WpfApp1
     {
         public Tcp tcp;
         public DispatcherTimer timer = new DispatcherTimer();
+        public DispatcherTimer comtimer = new DispatcherTimer();
         public Mainmessage message1 = new Mainmessage();
         public MainMessageIn messagein= new MainMessageIn();
 
@@ -34,7 +35,6 @@ namespace WpfApp1
         public List<Point>spawnpoints = new List<Point>(); 
         public List<Turnpoint> turnpoints = new List<Turnpoint>();
         public List<Switchlanepoint> switchlanepoints = new List<Switchlanepoint>();
-        public Rectangle objtets;
 
         public int ticker;
         public int connectionticker;
@@ -46,13 +46,15 @@ namespace WpfApp1
         public int screenbottom=900;
         public string ipadress = "127.0.0.1";
         public int carspeed = 4;
+        public int port = 8080;
+        public int sendtime = 500;
+        public int reconnecttime = 100;
+
 
 
         public MainWindow()
         {
             InitializeComponent();
-
-
 
             timer.Interval =TimeSpan.FromMilliseconds(1);
             timer.Tick += Engine;
@@ -68,26 +70,26 @@ namespace WpfApp1
             connectionticker = 0;
 
             tcp = new Tcp();
-            tcp.Connect(ipadress, 12345);
+            tcp.Connect(ipadress, port);
             
 
         }
 
         public void Engine(object sender, EventArgs e)
         {
-            spawn();
-
             reconnect();
+
+            messagesendandreceive();
+
+            spawn();
 
             ticks();
             carcollision();
 
-            outabounds();
-
-
             updateMessage();
 
-            messagesendandreceive();
+            outabounds();
+
         }
 
         public void ticks()
@@ -277,18 +279,23 @@ namespace WpfApp1
         public void messagesendandreceive()
         {
             ticker++;
-            if (ticker == 200&&tcp.getconnected()==true)
+            if (tcp.getconnected()==true)
             {
-                if (message1 == null)
-                {
-                    return;
-                }
 
-                test.Text = tcp.sendmessages(message1);
+                if(ticker == sendtime)
+                {
+                    if (message1 == null)
+                    {
+                        return;
+                    }
+
+                    test.Text = tcp.sendmessages(message1);
+
+                }
 
                 messagein = tcp.receivemessages();
 
-                if(messagein.messageIn1!=null && messagein.messageIn2 != null)
+                if(messagein.messageIn1.C.Cars.Count !=0 && messagein.messageIn2.D.Cars.Count() != 0)
                 {
                     for (int i = 0; i < TrafficlightsOnScreen.Count(); i++)
                     {
@@ -354,9 +361,9 @@ namespace WpfApp1
             {
                 connectionticker++;
 
-                if (connectionticker == 1000)
+                if (connectionticker == reconnecttime)
                 {
-                    tcp.Connect(ipadress, 12345);
+                    tcp.Connect(ipadress, port);
                     connectionticker = 0;
                 }
 

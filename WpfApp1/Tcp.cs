@@ -35,7 +35,7 @@ namespace WpfApp1
 
             try
             {
-                socket.Connect(IPAddress.Parse(ipAddress), port);
+                socket.ConnectAsync(IPAddress.Parse(ipAddress), port);
                 connected = true;
             }
             catch (Exception ex)
@@ -60,7 +60,7 @@ namespace WpfApp1
             try
             {
                 data = new byte[socket.SendBufferSize];
-                int j = socket.Receive(data);
+                int j = socket.ReceiveAsync(data).Result;
 
                 byte[] adata = new byte[j];
                 for (int i = 0; i < j; i++)
