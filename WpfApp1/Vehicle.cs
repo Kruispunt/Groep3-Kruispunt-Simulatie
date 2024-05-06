@@ -20,8 +20,6 @@ namespace WpfApp1
         private bool moving;
         private int speed;
 
-        private TrafficLight lightwaiting;
-
 
         public Vehicle(float x, float y, Rectangle box, Drivedirection direction, float width, float height, int speed) {
             position.X = x;
@@ -55,6 +53,7 @@ namespace WpfApp1
 
         public virtual void Tick()
         {
+
             if (moving)
             {
                 Move();
@@ -119,6 +118,37 @@ namespace WpfApp1
                 resize(15, 10);
             }
         }
+
+        public bool onpoint(Vector2 point)
+        {
+            if (point.X > getposition().X - ((GetWidth() / 2.0)) && point.X < getposition().X + ((GetWidth() / 2.0)) && point.Y > getposition().Y - ((GetHeight() / 2.0)) && point.Y < getposition().Y + (GetHeight() / 2.0))
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public bool closeby(Vector2 point)
+        {
+
+            if (getdirection() == Drivedirection.North || getdirection() == Drivedirection.South)
+            {
+                if (point.X > getposition().X - ((GetWidth() / 2.0) + 1) && point.X < getposition().X + ((GetWidth() / 2.0) + 1) && point.Y > getposition().Y - ((GetHeight() / 2.0) + GetHeight()) && point.Y < getposition().Y + ((GetHeight() / 2.0) + GetHeight()))
+                {
+                    return true;
+                }
+            }
+            else if (getdirection() == Drivedirection.East || getdirection() == Drivedirection.West)
+            {
+                if (point.X > getposition().X - ((GetWidth() / 2.0) + GetWidth()) && point.X < getposition().X + ((GetWidth() / 2.0) + GetWidth()) && point.Y > getposition().Y - ((GetHeight() / 2.0) + 1) && point.Y < getposition().Y + ((GetHeight() / 2.0) + 1))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
 
         public void resize(float w, float h)
         {

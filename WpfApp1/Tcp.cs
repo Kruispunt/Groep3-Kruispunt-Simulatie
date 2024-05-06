@@ -32,10 +32,10 @@ namespace WpfApp1
         public void Connect(string ipAddress, int port)
         {
             socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-
+            socket.ReceiveTimeout = 1;
             try
             {
-                socket.ConnectAsync(IPAddress.Parse(ipAddress), port);
+                socket.Connect(IPAddress.Parse(ipAddress), port);
                 connected = true;
             }
             catch (Exception ex)
@@ -57,22 +57,20 @@ namespace WpfApp1
 
         public byte[] Receive()
         {
-            try
+            
+            data = new byte[socket.SendBufferSize];
+            if (socket.Available > 0)
             {
-                data = new byte[socket.SendBufferSize];
-                int j = socket.ReceiveAsync(data).Result;
+                int j = socket.Receive(data);
 
                 byte[] adata = new byte[j];
                 for (int i = 0; i < j; i++)
                     adata[i] = data[i];
                 //accepteddata.Close();
+               
                 return adata;
             }
-            catch
-            {
-                return null;
-            }
-
+            return null;
 
         }
 

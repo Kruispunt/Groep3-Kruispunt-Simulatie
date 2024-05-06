@@ -72,7 +72,7 @@ namespace WpfApp1
 
         public void Tick()
         {
-            colorchangetest();
+            //colorchangetest();
             colorchange();
 
         }

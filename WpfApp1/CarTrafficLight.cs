@@ -57,7 +57,9 @@ namespace WpfApp1
 
         public override void SetLoop(List<Vehicle> vehicles)
         {
-            foreach (Car car in vehicles)
+            List<Car> cars = vehicles.OfType<Car>().ToList();
+
+            foreach (Car car in cars)
             {
                 if (car.onpoint(loopfrontpos) && loopFront == false)
                 {

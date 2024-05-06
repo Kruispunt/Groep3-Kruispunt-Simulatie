@@ -9,10 +9,10 @@
     <Canvas x:Name="Canvas" Background="DarkSlateBlue">
         <TextBlock x:Name="test">test</TextBlock>
 
-        <Rectangle x:Name="bycle1" Height="5" Width="1600"         Fill="LightPink" Canvas.Left="0" Canvas.Top="330"/>
-        <Rectangle x:Name="bycle2" Height="555" Width="5"         Fill="LightPink" Canvas.Left="85" Canvas.Top="330"/>
-        <Rectangle x:Name="bycle3" Height="555" Width="5"         Fill="LightPink" Canvas.Left="985" Canvas.Top="330"/>
-        <Rectangle x:Name="bycle4" Height="5" Width="1600"         Fill="LightPink" Canvas.Left="0" Canvas.Top="450"/>
+        <Rectangle x:Name="bycle1" Height="8" Width="1600"         Fill="LightPink" Canvas.Left="0" Canvas.Top="330"/>
+        <Rectangle x:Name="bycle2" Height="555" Width="8"         Fill="LightPink" Canvas.Left="85" Canvas.Top="330"/>
+        <Rectangle x:Name="bycle3" Height="555" Width="8"         Fill="LightPink" Canvas.Left="985" Canvas.Top="330"/>
+        <Rectangle x:Name="bycle4" Height="8" Width="1600"         Fill="LightPink" Canvas.Left="0" Canvas.Top="450"/>
 
         <Rectangle x:Name="RoadE3" Height="350" Width="10"         Fill="LightGray" Canvas.Left="900" Canvas.Top="0"/>
         <Rectangle x:Name="RoadE2" Height="365" Width="10"         Fill="LightGray" Canvas.Left="911" Canvas.Top="0"/>

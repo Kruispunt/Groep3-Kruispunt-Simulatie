@@ -52,14 +52,6 @@ namespace WpfApp1
             base.Tick();
         }
 
-        public bool onpoint(Vector2 point)
-        {
-            if (point.X>getposition().X-((GetWidth()/2.0)) && point.X < getposition().X + ((GetWidth() / 2.0))&& point.Y > getposition().Y - ((GetHeight() / 2.0))&&point.Y < getposition().Y + (GetHeight() / 2.0))
-            {
-                return true;
-            }
-            return false;
-        }
 
         public void CheckTrafficLight(CarTrafficLight trafficlights)
         {
@@ -75,26 +67,7 @@ namespace WpfApp1
             }
         }
 
-        public bool closeby(Vector2 point)
-        {
 
-            if (getdirection() == Drivedirection.North || getdirection() == Drivedirection.South)
-            {
-                if (point.X > getposition().X - ((GetWidth() / 2.0)+1) && point.X < getposition().X + ((GetWidth() / 2.0)+1) && point.Y > getposition().Y - ((GetHeight() / 2.0) + 15) && point.Y < getposition().Y + ((GetHeight() / 2.0) + 15))
-                {
-                    return true;
-                }
-            }
-            else if (getdirection() == Drivedirection.East || getdirection() == Drivedirection.West)
-            {
-                if (point.X > getposition().X - ((GetWidth() / 2.0)+15) && point.X < getposition().X + ((GetWidth() / 2.0) + 15) && point.Y > getposition().Y - ((GetHeight() / 2.0)+1) && point.Y < getposition().Y + ((GetHeight() / 2.0)+1))
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
 
     }
 }

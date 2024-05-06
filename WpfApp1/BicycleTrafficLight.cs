@@ -11,6 +11,7 @@ namespace WpfApp1
     {
         private Vector2 loopfrontpos;
         private bool loopFront;
+        private Bycicle Onfrontloop;
 
         public BicycleTrafficLight(int id, char groep, Vector2 loopfrontpos) : base(id, groep, Direction.straight, typeTrafficlight.Cyclistlight)
         {
@@ -30,6 +31,31 @@ namespace WpfApp1
         {
             return new CyclistRoadInfo(loopFront);
 
+        }
+        public override void SetLoop(List<Vehicle> vehicles)
+        {
+            List<Bycicle> bikes = vehicles.OfType<Bycicle>().ToList();
+
+            foreach (Bycicle bike in bikes)
+            {
+                if (bike.onpoint(loopfrontpos) && loopFront == false)
+                {
+                    loopFront = true;
+                    bike.setwaitingtrafficlight(this);
+                    Onfrontloop = bike;
+                    //if (getDirection() == Direction.right || getDirection() == Direction.left)
+                    //{
+                        //bike.setturningpoint(turnposition, futuredirection);
+                    //}
+
+                }
+                else if (Onfrontloop != null && !Onfrontloop.onpoint(loopfrontpos))
+                {
+                    loopFront = false;
+                    Onfrontloop = null;
+                }
+
+            }
         }
     }
 }

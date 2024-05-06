@@ -15,6 +15,7 @@ using Accessibility;
 using static System.Net.Mime.MediaTypeNames;
 using System.Windows.Media.Animation;
 using System.Diagnostics;
+using System.Threading;
 
 namespace WpfApp1
 {
@@ -23,6 +24,7 @@ namespace WpfApp1
     /// </summary>
     public partial class MainWindow : Window
     {
+
         public Tcp tcp;
         public DispatcherTimer timer = new DispatcherTimer();
         public DispatcherTimer comtimer = new DispatcherTimer();
@@ -36,20 +38,22 @@ namespace WpfApp1
         public List<Turnpoint> turnpoints = new List<Turnpoint>();
         public List<Switchlanepoint> switchlanepoints = new List<Switchlanepoint>();
 
-        public int ticker;
-        public int connectionticker;
+        public int ticker =0;
+        public int connectionticker=0;
 
-        public int spawncars;
-        public int spawnbus;
+        public int spawncars=9;
+        public int spawnbus=9;
+        public int spawnbicycle=9;
         public int maxentities=300;
         public int screenleft=1600;
         public int screenbottom=900;
         public string ipadress = "127.0.0.1";
         public int carspeed = 4;
+        public int bicyclespeed = 2;
+        public int walkspeed = 1;
         public int port = 8080;
         public int sendtime = 500;
         public int reconnecttime = 100;
-
 
 
         public MainWindow()
@@ -59,34 +63,31 @@ namespace WpfApp1
             timer.Interval =TimeSpan.FromMilliseconds(1);
             timer.Tick += Engine;
             timer.Start();
+
+            tcp = new Tcp();
+            tcp.Connect(ipadress, port);
+
+            Thread comthread = new Thread(Comtimer);
+            comthread.Start();
+
             Canvas.Focus();
 
             trafficlights();
             PointSet();
 
-            ticker = 0;
-            spawncars = 9;
-            spawnbus = 9;
-            connectionticker = 0;
 
-            tcp = new Tcp();
-            tcp.Connect(ipadress, port);
-            
 
         }
+        
 
         public void Engine(object sender, EventArgs e)
         {
-            reconnect();
-
-            messagesendandreceive();
 
             spawn();
 
             ticks();
             carcollision();
-
-            updateMessage();
+            bikecollision();
 
             outabounds();
 
@@ -123,9 +124,11 @@ namespace WpfApp1
 
         public void carcollision()
         {
-            foreach (Car car in vehicles)
+            List<Car> cars = vehicles.OfType<Car>().ToList();
+
+            foreach (Car car in cars)
             {
-                foreach(Car car1 in vehicles)
+                foreach(Car car1 in cars)
                 {
                     if (car == car1)
                     {
@@ -141,6 +144,32 @@ namespace WpfApp1
                         car.setMoving(true);
                     }
                     
+                }
+            }
+        }
+
+        public void bikecollision()
+        {
+            List<Bycicle> bikes = vehicles.OfType<Bycicle>().ToList();
+
+            foreach (Bycicle bike in bikes)
+            {
+                foreach (Bycicle bike1 in bikes)
+                {
+                    if (bike == bike1)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        if (bike.closeby(bike1.getposition()))
+                        {
+                            bike.setMoving(false);
+                            break;
+                        }
+                        bike.setMoving(true);
+                    }
+
                 }
             }
         }
@@ -163,6 +192,13 @@ namespace WpfApp1
                 spawncars = 0;
             }
             else{ spawncars++; }
+
+            if (spawnbicycle >= 10 && vehicles.Count() < maxentities)
+            {
+                CreateNewBicycle();
+                spawnbicycle = 0;
+            }
+            else { spawnbicycle++; }
         }
 
         public void CreateNewCar()
@@ -222,7 +258,49 @@ namespace WpfApp1
             vehicles.Add(new Bus(spawnpoint.getpoint().X, spawnpoint.getpoint().Y, newBus, spawnpoint.GetDrivedirection(), 10, 15, carspeed,i));
         }
 
+        public void CreateNewBicycle()
+        {
+            Random r = new Random();
+            int i = r.Next(spawnpoints.Count());
+            Point spawnpoint = spawnpoints[i];
+
+            while (spawnpoint.getspawnpointtype() != Spawnpointtype.Bicycle)
+            {
+                i = r.Next(spawnpoints.Count());
+                spawnpoint = spawnpoints[i];
+            }
+
+            Rectangle newBicycle = new Rectangle
+            {
+                Tag = "Bicycle",
+                Height = 4,
+                Width = 4,
+                Fill = Brushes.Purple
+            };
+
+            Canvas.SetTop(newBicycle, spawnpoint.getpoint().Y);
+            Canvas.SetLeft(newBicycle, spawnpoint.getpoint().X);
+            Canvas.Children.Add(newBicycle);
+
+            vehicles.Add(new Bycicle(spawnpoint.getpoint().X, spawnpoint.getpoint().Y, newBicycle, spawnpoint.GetDrivedirection(), 4, 4, bicyclespeed));
+        }
+
         //---------------------------messages and connection-------------------------
+
+        public void Comtimer()
+        {
+            comtimer.Interval = TimeSpan.FromMilliseconds(1);
+            comtimer.Tick += communicate;
+            comtimer.Start();
+        }
+
+        public void communicate(object sender, EventArgs e)
+        {
+            reconnect();
+            updateMessage();
+            messagesendandreceive();
+        }
+
 
         public void updateMessage()
         {
@@ -291,11 +369,13 @@ namespace WpfApp1
 
                     test.Text = tcp.sendmessages(message1);
 
+
+                    ticker = 0;
                 }
 
                 messagein = tcp.receivemessages();
 
-                if(messagein.messageIn1.C.Cars.Count !=0 && messagein.messageIn2.D.Cars.Count() != 0)
+                if (messagein.messageIn1.C.Cars.Count !=0 && messagein.messageIn2.D.Cars.Count() != 0)
                 {
                     for (int i = 0; i < TrafficlightsOnScreen.Count(); i++)
                     {
@@ -350,8 +430,7 @@ namespace WpfApp1
 
                     }
                 }
-                
-                ticker = 0;
+
             }
         }
 
@@ -403,7 +482,15 @@ namespace WpfApp1
             spawnpoints.Add(new Point(new Vector2(184, 900), Drivedirection.North, Spawnpointtype.Bus));
             spawnpoints.Add(new Point(new Vector2(933, 0), Drivedirection.South, Spawnpointtype.Bus));
 
+            //bycicle
+            spawnpoints.Add(new Point(new Vector2(0, 330), Drivedirection.East, Spawnpointtype.Bicycle));
+            spawnpoints.Add(new Point(new Vector2(1600, 334), Drivedirection.West, Spawnpointtype.Bicycle));
+
+
             //--------------------------turnpoints---------------------------------
+
+
+            turnpoints.Add(new Turnpoint(new Vector2(100, 330),Drivedirection.South, false, Spawnpointtype.Bicycle));
 
             //--------------------------Changelanepoints---------------------------------
         }
@@ -468,8 +555,8 @@ namespace WpfApp1
             TrafficlightsOnScreen.Add(new BicycleTrafficLight(0, 'B', new Vector2(922, 290)));//A1 
             TrafficlightsOnScreen.Add(new BicycleTrafficLight(1, 'B', new Vector2(922, 290)));//A1 
 
-            TrafficlightsOnScreen.Add(new BicycleTrafficLight(0, 'E', new Vector2(922, 290)));//A1 
-            TrafficlightsOnScreen.Add(new BicycleTrafficLight(1, 'E', new Vector2(922, 290)));//A1 
+            TrafficlightsOnScreen.Add(new BicycleTrafficLight(0, 'E', new Vector2(981, 334)));//A1 
+            TrafficlightsOnScreen.Add(new BicycleTrafficLight(1, 'E', new Vector2(890, 330)));//A1 
 
             TrafficlightsOnScreen.Add(new BicycleTrafficLight(0, 'F', new Vector2(922, 290)));//A1 
             TrafficlightsOnScreen.Add(new BicycleTrafficLight(1, 'F', new Vector2(922, 290)));//A1 
