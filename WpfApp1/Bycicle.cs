@@ -28,6 +28,16 @@ namespace WpfApp1
             base.Tick();
         }
 
+        public void checkturnpoints(List<Turnpoint> turnpoints)
+        {
+            foreach (Turnpoint turnpoint in turnpoints)
+            {
+                if (onpoint(turnpoint.getpoint()) == true)
+                {
+                    //turn
+                }
+            }
+        }
 
         public void CheckTrafficLight(BicycleTrafficLight trafficlights)
         {

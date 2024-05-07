@@ -42,8 +42,11 @@ namespace WpfApp1
         public int connectionticker=0;
 
         public int spawncars=9;
-        public int spawnbus=9;
+        public int spawncarsrate=10;
+        public int spawnbus=1;
+        public int spawnbusrate=50;
         public int spawnbicycle=9;
+        public int spawnbicyclerate=10;
         public int maxentities=300;
         public int screenleft=1600;
         public int screenbottom=900;
@@ -179,21 +182,21 @@ namespace WpfApp1
 
         public void spawn()
         {
-            if (spawnbus >= 50 && vehicles.Count() < maxentities)
+            if (spawnbus >= spawnbusrate && vehicles.Count() < maxentities)
             {
                 CreateNewBus();
                 spawnbus = 0;
             }
             else { spawnbus++; }
 
-            if (spawncars >= 10 && vehicles.Count() < maxentities)
+            if (spawncars >= spawncarsrate && vehicles.Count() < maxentities)
             {
                 CreateNewCar();
                 spawncars = 0;
             }
             else{ spawncars++; }
 
-            if (spawnbicycle >= 10 && vehicles.Count() < maxentities)
+            if (spawnbicycle >= spawnbicyclerate && vehicles.Count() < maxentities)
             {
                 CreateNewBicycle();
                 spawnbicycle = 0;
@@ -300,7 +303,6 @@ namespace WpfApp1
             updateMessage();
             messagesendandreceive();
         }
-
 
         public void updateMessage()
         {
@@ -485,6 +487,8 @@ namespace WpfApp1
             //bycicle
             spawnpoints.Add(new Point(new Vector2(0, 330), Drivedirection.East, Spawnpointtype.Bicycle));
             spawnpoints.Add(new Point(new Vector2(1600, 334), Drivedirection.West, Spawnpointtype.Bicycle));
+            spawnpoints.Add(new Point(new Vector2(1600, 454), Drivedirection.West, Spawnpointtype.Bicycle));
+            spawnpoints.Add(new Point(new Vector2(0, 450), Drivedirection.East, Spawnpointtype.Bicycle));
 
 
             //--------------------------turnpoints---------------------------------
@@ -552,8 +556,8 @@ namespace WpfApp1
             TrafficlightsOnScreen.Add(new BicycleTrafficLight(0, 'A', new Vector2(922, 290)));//A0 
             TrafficlightsOnScreen.Add(new BicycleTrafficLight(1, 'A', new Vector2(922, 290)));//A1 
 
-            TrafficlightsOnScreen.Add(new BicycleTrafficLight(0, 'B', new Vector2(922, 290)));//A1 
-            TrafficlightsOnScreen.Add(new BicycleTrafficLight(1, 'B', new Vector2(922, 290)));//A1 
+            TrafficlightsOnScreen.Add(new BicycleTrafficLight(0, 'B', new Vector2(90, 450)));//A1 
+            TrafficlightsOnScreen.Add(new BicycleTrafficLight(1, 'B', new Vector2(198, 454)));//A1 
 
             TrafficlightsOnScreen.Add(new BicycleTrafficLight(0, 'E', new Vector2(981, 334)));//A1 
             TrafficlightsOnScreen.Add(new BicycleTrafficLight(1, 'E', new Vector2(890, 330)));//A1 
