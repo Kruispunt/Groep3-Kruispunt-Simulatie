@@ -104,6 +104,11 @@ namespace WpfApp1
                 //add collision detect
                 Canvas.SetTop(vehicles[i].GetRectangle(),vehicles[i].getposition().Y);
                 Canvas.SetLeft(vehicles[i].GetRectangle(),vehicles[i].getposition().X);
+                if (vehicles[i].GetType() == typeof(Bycicle))
+                {
+                    Bycicle b = (Bycicle)vehicles[i];
+                    b.checkturnpoints(turnpoints);
+                }
             }
 
             for (int i = 0; i < TrafficlightsOnScreen.Count(); i++)
@@ -139,7 +144,7 @@ namespace WpfApp1
                     }
                     else
                     {
-                        if (car.closeby(car1.getposition()))
+                        if (car.closeby(car1.getposition(), 1))
                         {
                             car.setMoving(false);
                             break;
@@ -165,7 +170,7 @@ namespace WpfApp1
                     }
                     else
                     {
-                        if (bike.closeby(bike1.getposition()))
+                        if (bike.closeby(bike1.getposition(),3))
                         {
                             bike.setMoving(false);
                             break;
@@ -299,7 +304,7 @@ namespace WpfApp1
 
         public void communicate(object sender, EventArgs e)
         {
-            reconnect();
+            //reconnect();
             updateMessage();
             messagesendandreceive();
         }
@@ -485,16 +490,31 @@ namespace WpfApp1
             spawnpoints.Add(new Point(new Vector2(933, 0), Drivedirection.South, Spawnpointtype.Bus));
 
             //bycicle
-            spawnpoints.Add(new Point(new Vector2(0, 330), Drivedirection.East, Spawnpointtype.Bicycle));
-            spawnpoints.Add(new Point(new Vector2(1600, 334), Drivedirection.West, Spawnpointtype.Bicycle));
-            spawnpoints.Add(new Point(new Vector2(1600, 454), Drivedirection.West, Spawnpointtype.Bicycle));
-            spawnpoints.Add(new Point(new Vector2(0, 450), Drivedirection.East, Spawnpointtype.Bicycle));
+            spawnpoints.Add(new Point(new Vector2(0, 334), Drivedirection.East, Spawnpointtype.Bicycle));
+            spawnpoints.Add(new Point(new Vector2(1600, 330), Drivedirection.West, Spawnpointtype.Bicycle));
+            spawnpoints.Add(new Point(new Vector2(1600, 450), Drivedirection.West, Spawnpointtype.Bicycle));
+            spawnpoints.Add(new Point(new Vector2(0, 454), Drivedirection.East, Spawnpointtype.Bicycle));
+            spawnpoints.Add(new Point(new Vector2(89, 900), Drivedirection.North, Spawnpointtype.Bicycle));
+            spawnpoints.Add(new Point(new Vector2(989, 900), Drivedirection.North, Spawnpointtype.Bicycle));
 
 
             //--------------------------turnpoints---------------------------------
 
 
-            turnpoints.Add(new Turnpoint(new Vector2(100, 330),Drivedirection.South, false, Spawnpointtype.Bicycle));
+            turnpoints.Add(new Turnpoint(new Vector2(85, 334),Drivedirection.South, false, Spawnpointtype.Bicycle,Drivedirection.East,50));
+            turnpoints.Add(new Turnpoint(new Vector2(84, 330),Drivedirection.South, false, Spawnpointtype.Bicycle,Drivedirection.West,20));
+            Turnpoint a = new Turnpoint(new Vector2(89, 334),Drivedirection.East, false, Spawnpointtype.Bicycle,Drivedirection.North,50);
+            a.setNeighbour(new Turnpoint(new Vector2(89, 330), Drivedirection.West, true, Spawnpointtype.Bicycle, Drivedirection.North, 50));
+            turnpoints.Add(a);
+            turnpoints.Add(a.getNeighbour());
+
+            turnpoints.Add(new Turnpoint(new Vector2(985, 334), Drivedirection.South, true, Spawnpointtype.Bicycle, Drivedirection.East, 50));
+            turnpoints.Add(new Turnpoint(new Vector2(985, 330), Drivedirection.South, true, Spawnpointtype.Bicycle, Drivedirection.West, 20));
+
+            Turnpoint b = new Turnpoint(new Vector2(989, 334), Drivedirection.East, false, Spawnpointtype.Bicycle, Drivedirection.North, 50);
+            b.setNeighbour(new Turnpoint(new Vector2(989, 330), Drivedirection.West, true, Spawnpointtype.Bicycle, Drivedirection.North, 50));
+            turnpoints.Add(b);
+            turnpoints.Add(b.getNeighbour());
 
             //--------------------------Changelanepoints---------------------------------
         }
@@ -553,17 +573,17 @@ namespace WpfApp1
 
             //-------------------------------------------------------------------------------bicycle---------------------------------------------------------------------------------------
             //todo change loop points
-            TrafficlightsOnScreen.Add(new BicycleTrafficLight(0, 'A', new Vector2(922, 290)));//A0 
-            TrafficlightsOnScreen.Add(new BicycleTrafficLight(1, 'A', new Vector2(922, 290)));//A1 
+            TrafficlightsOnScreen.Add(new BicycleTrafficLight(0, 'A', new Vector2(922, 290)));
+            TrafficlightsOnScreen.Add(new BicycleTrafficLight(1, 'A', new Vector2(922, 290)));
 
-            TrafficlightsOnScreen.Add(new BicycleTrafficLight(0, 'B', new Vector2(90, 450)));//A1 
-            TrafficlightsOnScreen.Add(new BicycleTrafficLight(1, 'B', new Vector2(198, 454)));//A1 
+            TrafficlightsOnScreen.Add(new BicycleTrafficLight(0, 'B', new Vector2(90, 454))); 
+            TrafficlightsOnScreen.Add(new BicycleTrafficLight(1, 'B', new Vector2(198, 450)));
 
-            TrafficlightsOnScreen.Add(new BicycleTrafficLight(0, 'E', new Vector2(981, 334)));//A1 
-            TrafficlightsOnScreen.Add(new BicycleTrafficLight(1, 'E', new Vector2(890, 330)));//A1 
+            TrafficlightsOnScreen.Add(new BicycleTrafficLight(0, 'E', new Vector2(981, 330)));
+            TrafficlightsOnScreen.Add(new BicycleTrafficLight(1, 'E', new Vector2(890, 334)));
 
-            TrafficlightsOnScreen.Add(new BicycleTrafficLight(0, 'F', new Vector2(922, 290)));//A1 
-            TrafficlightsOnScreen.Add(new BicycleTrafficLight(1, 'F', new Vector2(922, 290)));//A1 
+            TrafficlightsOnScreen.Add(new BicycleTrafficLight(0, 'F', new Vector2(985, 340)));
+            TrafficlightsOnScreen.Add(new BicycleTrafficLight(1, 'F', new Vector2(989, 445)));
 
 
             //-------------------------------------------------------------------------------pedestrian------------------------------------------------------------------------------------

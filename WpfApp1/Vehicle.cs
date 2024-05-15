@@ -17,6 +17,10 @@ namespace WpfApp1
 
         private float width;
         private float height;
+
+        private float _width;
+        private float _height;
+
         private bool moving;
         private int speed;
 
@@ -26,6 +30,8 @@ namespace WpfApp1
             position.Y = y;
             this.box = box;
             this.width = width;
+            this._width = width;
+            this._height = height;
             this.height = height;
             moving = true;
             this.direction = direction;
@@ -35,6 +41,8 @@ namespace WpfApp1
         public virtual void setwaitingtrafficlight(TrafficLight trafficlights) {}
 
         public void setMoving(bool moving) { this.moving = moving; }
+
+        public void setDriveDirection(Drivedirection drivedirection) { direction = drivedirection; }
 
         public Rectangle GetRectangle(){ return box; }
 
@@ -95,27 +103,28 @@ namespace WpfApp1
             }
         }
 
+
         public void setrotation(Drivedirection drivedirection)
         {
 
             direction = drivedirection;
             if (direction == Drivedirection.North)
             {
-                resize(10, 15);
+                resize(_width, _height);
             }
             if (direction == Drivedirection.South)
             {
-                resize(10, 15);
+                resize(_width, _height);
 
             }
             if (direction == Drivedirection.East)
             {
-                resize(15, 10);
+                resize(_height, _width);
 
             }
             if (direction == Drivedirection.West)
             {
-                resize(15, 10);
+                resize(_height, _width);
             }
         }
 
@@ -128,19 +137,19 @@ namespace WpfApp1
             return false;
         }
 
-        public bool closeby(Vector2 point)
+        public bool closeby(Vector2 point,float outer)
         {
 
             if (getdirection() == Drivedirection.North || getdirection() == Drivedirection.South)
             {
-                if (point.X > getposition().X - ((GetWidth() / 2.0) + 1) && point.X < getposition().X + ((GetWidth() / 2.0) + 1) && point.Y > getposition().Y - ((GetHeight() / 2.0) + GetHeight()) && point.Y < getposition().Y + ((GetHeight() / 2.0) + GetHeight()))
+                if (point.X > getposition().X - ((GetWidth() / 2.0) + outer) && point.X < getposition().X + ((GetWidth() / 2.0) + outer) && point.Y > getposition().Y - ((GetHeight() / 2.0) + GetHeight()) && point.Y < getposition().Y + ((GetHeight() / 2.0) + GetHeight()))
                 {
                     return true;
                 }
             }
             else if (getdirection() == Drivedirection.East || getdirection() == Drivedirection.West)
             {
-                if (point.X > getposition().X - ((GetWidth() / 2.0) + GetWidth()) && point.X < getposition().X + ((GetWidth() / 2.0) + GetWidth()) && point.Y > getposition().Y - ((GetHeight() / 2.0) + 1) && point.Y < getposition().Y + ((GetHeight() / 2.0) + 1))
+                if (point.X > getposition().X - ((GetWidth() / 2.0) + GetWidth()) && point.X < getposition().X + ((GetWidth() / 2.0) + GetWidth()) && point.Y > getposition().Y - ((GetHeight() / 2.0) + outer) && point.Y < getposition().Y + ((GetHeight() / 2.0) + outer))
                 {
                     return true;
                 }

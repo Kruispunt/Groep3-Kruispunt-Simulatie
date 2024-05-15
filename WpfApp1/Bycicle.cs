@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Shapes;
@@ -10,6 +11,7 @@ namespace WpfApp1
     class Bycicle : Vehicle
     {
         private BicycleTrafficLight lightwaiting;
+        private Turnpoint futurepoint;
 
         public Bycicle(float x, float y, Rectangle box, Drivedirection direction, float width, float height, int speed) : base(x, y, box, direction, width, height, speed)
         {
@@ -30,11 +32,17 @@ namespace WpfApp1
 
         public void checkturnpoints(List<Turnpoint> turnpoints)
         {
+
             foreach (Turnpoint turnpoint in turnpoints)
             {
                 if (onpoint(turnpoint.getpoint()) == true)
                 {
-                    //turn
+                    Random r = new Random();
+                    if ((turnpoint.getRequired()== true||r.Next(100)<=turnpoint.getTurnpercentage())&& turnpoint.getincoming()==getdirection())
+                    {
+                        setDriveDirection(turnpoint.GetDrivedirection());
+                    }
+
                 }
             }
         }
