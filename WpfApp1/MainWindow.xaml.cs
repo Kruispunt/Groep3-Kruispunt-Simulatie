@@ -51,9 +51,9 @@ namespace WpfApp1
         public int screenleft=1600;
         public int screenbottom=900;
         public string ipadress = "192.168.137.1";
-        public int carspeed = 2;
-        public int bicyclespeed = 1;
-        public int walkspeed = 1;
+        public float carspeed = 1f;
+        public float bicyclespeed = 0.5f;
+        public float walkspeed = 0.1f;
         public int port = 8080;
         public int sendtime = 500;
         public int reconnecttime = 100;

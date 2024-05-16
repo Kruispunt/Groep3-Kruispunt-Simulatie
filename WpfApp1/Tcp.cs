@@ -109,7 +109,7 @@ namespace WpfApp1
             stream1.Position = 0;
             //Trace.WriteLine(System.Text.Encoding.Default.GetString(buffer));
 
-            MainMessageIn m2 = ser.ReadObject(stream1) as MainMessageIn;
+            MainMessageIn m2 = ser.ReadObject(stream1) as MainMessageIn; //todo add list
 
             return m2;
 

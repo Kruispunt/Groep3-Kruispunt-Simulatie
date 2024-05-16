@@ -22,10 +22,10 @@ namespace WpfApp1
         private float _height;
 
         private bool moving;
-        private int speed;
+        private float speed;
 
 
-        public Vehicle(float x, float y, Rectangle box, Drivedirection direction, float width, float height, int speed) {
+        public Vehicle(float x, float y, Rectangle box, Drivedirection direction, float width, float height, float speed) {
             position.X = x;
             position.Y = y;
             this.box = box;
