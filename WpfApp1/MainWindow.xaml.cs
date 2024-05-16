@@ -50,9 +50,9 @@ namespace WpfApp1
         public int maxentities=300;
         public int screenleft=1600;
         public int screenbottom=900;
-        public string ipadress = "127.0.0.1";
-        public int carspeed = 4;
-        public int bicyclespeed = 2;
+        public string ipadress = "192.168.137.1";
+        public int carspeed = 2;
+        public int bicyclespeed = 1;
         public int walkspeed = 1;
         public int port = 8080;
         public int sendtime = 500;
@@ -304,7 +304,7 @@ namespace WpfApp1
 
         public void communicate(object sender, EventArgs e)
         {
-            //reconnect();
+            reconnect();
             updateMessage();
             messagesendandreceive();
         }
@@ -432,7 +432,37 @@ namespace WpfApp1
                                 TrafficlightsOnScreen[i].setcolor(messagein.messageIn2.F.Cyclists[TrafficlightsOnScreen[i].getid()]);
                             }
                         }
+                        if (TrafficlightsOnScreen[i].GettrafficType() == typeTrafficlight.PedestrianLight)
+                        {
+                            if (TrafficlightsOnScreen[i].getgroep() == 'A')
+                            {
+                                TrafficlightsOnScreen[i].setcolor(messagein.messageIn1.A.Pedestrians[TrafficlightsOnScreen[i].getid()]);
+                            }
+                            if (TrafficlightsOnScreen[i].getgroep() == 'B')
+                            {
+                                TrafficlightsOnScreen[i].setcolor(messagein.messageIn1.B.Pedestrians[TrafficlightsOnScreen[i].getid()]);
+                            }
+                            if (TrafficlightsOnScreen[i].getgroep() == 'E')
+                            {
+                                TrafficlightsOnScreen[i].setcolor(messagein.messageIn2.E.Pedestrians[TrafficlightsOnScreen[i].getid()]);
+                            }
+                            if (TrafficlightsOnScreen[i].getgroep() == 'F')
+                            {
+                                TrafficlightsOnScreen[i].setcolor(messagein.messageIn2.F.Pedestrians[TrafficlightsOnScreen[i].getid()]);
+                            }
+                        }
+                        if (TrafficlightsOnScreen[i].GettrafficType() == typeTrafficlight.Buslight)
+                        {
+                            if (TrafficlightsOnScreen[i].getgroep() == 'B')
+                            {
+                                TrafficlightsOnScreen[i].setcolor(messagein.messageIn1.B.Busses[TrafficlightsOnScreen[i].getid()]);
+                            }
+                            if (TrafficlightsOnScreen[i].getgroep() == 'E')
+                            {
+                                TrafficlightsOnScreen[i].setcolor(messagein.messageIn2.E.Busses[TrafficlightsOnScreen[i].getid()]);
+                            }
 
+                        }
 
 
                     }
