@@ -44,24 +44,25 @@ namespace WpfApp1
         public int screenleft = 1600;
         public int screenbottom = 900;
 
-
+        
         public int maxentities = 300;
 
         public int spawncars=9;
-        public int spawncarsrate=100;
+        public int spawncarsrate=500;
 
         public int spawnbus=1;
         public int spawnbusrate=300;
 
         public int spawnbicycle=9;
-        public int spawnbicyclerate=100;        
+        public int spawnbicyclerate=200;        
         
         public int spawnpedestrian=49;
-        public int spawnpedestrianrate=10;
+        public int spawnpedestrianrate=200;
 
         public float carspeed = 1f;
         public float bicyclespeed = 0.5f;
-        public float walkspeed = 1f;
+        public float walkspeed = 0.1f;
+
 
         public int port = 8080;
         public int sendtime = 500;
