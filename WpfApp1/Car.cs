@@ -16,7 +16,7 @@ namespace WpfApp1
         private Vector2 turningpoint;
         private bool turning;
         
-        public Car(float x, float y, Rectangle box, Drivedirection direction,float width,float height, int speed) :base(x,y,box,direction,width,height,speed)
+        public Car(float x, float y, Rectangle box, Drivedirection direction,float width,float height, float speed) :base(x,y,box,direction,width,height,speed)
         {
             setrotation(direction);
             turning = false;

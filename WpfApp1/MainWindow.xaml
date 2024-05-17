@@ -24,8 +24,7 @@
         <Rectangle x:Name="RoadE1" Height="440" Width="10"         Fill="LightGray" Canvas.Left="922" Canvas.Top="0"/>
         <Rectangle x:Name="RoadEbus" Height="430" Width="10"         Fill="DarkGray" Canvas.Left="933" Canvas.Top="0"/>
 
-        <Rectangle x:Name="RoadBbus" Height="516" Width="10"         Fill="DarkGray" Canvas.Left="184" Canvas.Top="369"/>
-        <Rectangle x:Name="RoadBbus2" Height="10" Width="20"         Fill="DarkGray" Canvas.Left="184" Canvas.Top="433"/>
+        <Rectangle x:Name="RoadBbus" Height="516" Width="10"         Fill="DarkGray" Canvas.Left="184" Canvas.Top="411"/>
 
         <Rectangle x:Name="RoadC1" Height="10" Width="1600"         Fill="LightGray" Canvas.Left="0" Canvas.Top="348"/>
         <Rectangle x:Name="RoadC2" Height="10" Width="1600"         Fill="LightGray" Canvas.Left="0" Canvas.Top="359"/>
@@ -92,8 +91,7 @@
 
 
         <Rectangle x:Name="B0Bus" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="184" Canvas.Top="470"/>
-        <Rectangle x:Name="B1Bus" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="189" Canvas.Top="470"/>
-        
+
         <Rectangle x:Name="E1Bus" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="933" Canvas.Top="310"/>
         <Rectangle x:Name="E0Bus" Tag="trafficlight" Height="5" Width="5"  Fill="Red" Canvas.Left="938" Canvas.Top="310"/>
 

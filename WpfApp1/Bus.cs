@@ -7,12 +7,12 @@ using System.Windows.Shapes;
 
 namespace WpfApp1
 {
-    class Bus : Car
+    public class Bus : Car
     {
         private int line;
         private BusTrafficLight lightwaiting;
 
-        public Bus(float x, float y, Rectangle box, Drivedirection direction, float width, float height, int speed, int line) : base(x, y, box, direction, width, height, speed)
+        public Bus(float x, float y, Rectangle box, Drivedirection direction, float width, float height, float speed, int line) : base(x, y, box, direction, width, height, speed)
         {
             this.line = line;
         }

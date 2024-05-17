@@ -34,6 +34,7 @@ namespace WpfApp1
         public void setneighbour(BusTrafficLight neighbourtrafficlight) { this.neighbourTrafficLight = neighbourtrafficlight; }
         public BusTrafficLight getneighbour() { return neighbourTrafficLight; }
 
+        public Bus GetBus() { return busloop; }
 
         public int getbusline() { return busloop.getline(); }
 

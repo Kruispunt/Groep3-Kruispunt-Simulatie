@@ -8,20 +8,21 @@ using System.Windows.Shapes;
 
 namespace WpfApp1
 {
-    class Bycicle : Vehicle
+    public class Bycicle : Vehicle
     {
         private BicycleTrafficLight lightwaiting;
-        private Turnpoint futurepoint;
+        private int justturned;
 
-        public Bycicle(float x, float y, Rectangle box, Drivedirection direction, float width, float height, int speed) : base(x, y, box, direction, width, height, speed)
+        public Bycicle(float x, float y, Rectangle box, Drivedirection direction, float width, float height, float speed) : base(x, y, box, direction, width, height, speed)
         {
-
+            justturned = 0;
         }
 
         public override void setwaitingtrafficlight(TrafficLight trafficlights) { lightwaiting = (BicycleTrafficLight)trafficlights; }
 
         public override void Tick()
         {
+            justturned--;
             if (lightwaiting != null)
             {
                 CheckTrafficLight(lightwaiting);
@@ -35,12 +36,14 @@ namespace WpfApp1
 
             foreach (Turnpoint turnpoint in turnpoints)
             {
-                if (onpoint(turnpoint.getpoint()) == true)
+                if (onpoint(turnpoint.getpoint()) == true && turnpoint.getspawnpointtype()==Spawnpointtype.Bicycle)
                 {
                     Random r = new Random();
-                    if ((turnpoint.getRequired()== true||r.Next(100)<=turnpoint.getTurnpercentage())&& turnpoint.getincoming()==getdirection())
+                    if ((turnpoint.getRequired()== true||(r.Next(100)<=turnpoint.getTurnpercentage()&&justturned<=0))&& turnpoint.getincoming()==getdirection())
                     {
                         setDriveDirection(turnpoint.GetDrivedirection());
+                        setposition(turnpoint.getpoint());
+                        justturned = 50;
                     }
 
                 }
